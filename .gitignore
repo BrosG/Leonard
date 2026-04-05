@@ -12,3 +12,5 @@ Thumbs.db
 .flowky/
 prisma/*.db
 prisma/*.db-journal
+.firebase/
+.claude/

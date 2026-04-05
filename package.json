@@ -2,37 +2,42 @@
   "name": "leonard",
   "version": "1.0.0",
   "description": "Leonard - AI Yacht Concierge. Plan yacht trips, find services, and manage your maritime experience.",
-  "main": "index.js",
+  "main": "server.js",
   "type": "module",
   "scripts": {
-    "dev": "wrangler pages dev --proxy 5173 -- npx vite --host",
+    "dev": "concurrently \"npm:dev:api\" \"npm:dev:frontend\"",
+    "dev:api": "node server.js",
     "dev:frontend": "vite --host",
     "build": "vite build",
-    "preview": "wrangler pages dev dist",
-    "deploy": "npm run build && wrangler pages deploy dist --project-name=leonard",
-    "db:create": "wrangler d1 create leonard-db",
-    "db:migrate": "wrangler d1 execute leonard-db --file=./prisma/d1-schema.sql",
-    "db:migrate:local": "wrangler d1 execute leonard-db --local --file=./prisma/d1-schema.sql",
-    "prisma:generate": "prisma generate",
+    "start": "node server.js",
+    "deploy:hosting": "npm run build && firebase deploy --only hosting",
+    "deploy:api": "gcloud run deploy leonard-api --source . --region europe-west1 --allow-unauthenticated",
+    "deploy": "npm run deploy:hosting && npm run deploy:api",
+    "prisma:generate": "npx prisma generate",
+    "prisma:migrate": "npx prisma migrate deploy",
+    "prisma:push": "npx prisma db push",
     "prebuild": "node scripts/download-assets.js",
     "postinstall": "node scripts/download-assets.js"
   },
-  "keywords": ["ai", "yacht", "concierge", "marine", "gemini", "cloudflare", "firebase"],
+  "keywords": ["ai", "yacht", "concierge", "marine", "gemini", "gcloud", "firebase"],
   "author": "BrosG",
   "license": "MIT",
   "dependencies": {
     "@google/generative-ai": "^0.21.0",
     "@prisma/client": "^6.19.3",
+    "cors": "^2.8.5",
+    "express": "^4.19.2",
     "firebase": "^12.11.0",
+    "firebase-admin": "^13.7.0",
     "i18next": "^24.0.5",
     "i18next-http-backend": "^3.0.2"
   },
   "devDependencies": {
     "autoprefixer": "^10.4.20",
+    "concurrently": "^9.1.2",
     "postcss": "^8.4.49",
     "prisma": "^6.19.3",
     "tailwindcss": "^3.4.17",
-    "vite": "^6.0.5",
-    "wrangler": "^4.80.0"
+    "vite": "^6.0.5"
   }
 }

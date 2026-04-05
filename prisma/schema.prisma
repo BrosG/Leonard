@@ -1,11 +1,10 @@
 generator client {
-  provider        = "prisma-client-js"
-  previewFeatures = ["driverAdapters"]
+  provider = "prisma-client-js"
 }
 
 datasource db {
-  provider = "sqlite"
-  url      = "file:./dev.db"
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
 }
 
 model User {
@@ -20,25 +19,28 @@ model User {
   yachtType   String?
   yachtLength String?
   homePort    String?
-  preferences String?  // JSON string for flexible preferences
+  preferences Json?
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
   trips       Trip[]
 }
 
 model Trip {
-  id             Int      @id @default(autoincrement())
-  userId         Int
-  user           User     @relation(fields: [userId], references: [id])
-  title          String
-  departure      String
-  destination    String
-  startDate      String?
-  endDate        String?
-  duration       String?
-  distance       String?
-  planData       String   // Full JSON plan from AI
-  status         String   @default("draft") // draft, planned, active, completed
-  createdAt      DateTime @default(now())
-  updatedAt      DateTime @updatedAt
+  id          Int      @id @default(autoincrement())
+  userId      Int
+  user        User     @relation(fields: [userId], references: [id])
+  title       String
+  departure   String
+  destination String
+  startDate   String?
+  endDate     String?
+  duration    String?
+  distance    String?
+  planData    Json
+  status      String   @default("draft")
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@index([userId])
+  @@index([status])
 }
