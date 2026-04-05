@@ -187,7 +187,7 @@ export function initializeMobileApp() {
         document.getElementById('send-message-btn')?.addEventListener('click', handleSendMessage);
         document.getElementById('chat-input')?.addEventListener('keypress', e => { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); handleSendMessage(); }});
         document.getElementById('service-selection-close-btn')?.addEventListener('click', endServiceSelection);
-        console.log('⚓ MyYachtConcierge.ai Mobile is ready!');
+        console.log('Leonard Mobile is ready!');
     }
     
     const handleSendMessage = () => { const input = document.getElementById('chat-input'); if (input.value.trim()) { processAiRequest(input.value.trim()); input.value = ''; } };
