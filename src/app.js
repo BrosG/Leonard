@@ -112,7 +112,7 @@ function s(val, fallback = "") {
 }
 
 // Render trip plan (defensive against any AI response shape)
-function renderTripPlan(plan) {
+function renderTripPlan(plan, realData) {
   const planSection = document.getElementById("yacht-plan-output");
   const planContainer = document.getElementById("plan-container");
   if (!planSection || !planContainer) return;
@@ -234,11 +234,66 @@ function renderTripPlan(plan) {
         <ul class="space-y-3">${notes.map((n) => `<li class="flex items-start gap-3"><span class="text-yellow-600 text-xl mt-1">&bull;</span><span class="text-gray-700 flex-1">${s(n)}</span></li>`).join("")}</ul></div>`
           : ""
       }
+      ${renderRealDataPanels(realData)}
     </div>`;
 
   planContainer.innerHTML = html;
   planSection.classList.remove("hidden");
   setTimeout(() => planSection.scrollIntoView({ behavior: "smooth", block: "start" }), 300);
+}
+
+// Render real-world data panels (weather + marinas)
+function renderRealDataPanels(realData) {
+  if (!realData) return "";
+  let panels = "";
+
+  if (realData.weather?.length) {
+    panels += `<div class="mb-8 bg-gradient-to-br from-blue-50 to-cyan-50 rounded-3xl p-8 shadow-xl">
+      <h3 class="text-3xl font-bold text-ocean-blue mb-6 font-heading">Live Weather</h3>
+      <div class="grid md:grid-cols-${Math.min(realData.weather.length, 3)} gap-4">
+        ${realData.weather.map(w => `
+          <div class="bg-white rounded-2xl p-6 shadow-sm border border-blue-100">
+            <h4 class="font-bold text-ocean-blue text-lg mb-2">${s(w.location)}</h4>
+            <div class="text-4xl font-bold text-gray-800 mb-1">${s(w.current?.temp)}°C</div>
+            <div class="text-sm text-gray-600 capitalize mb-3">${s(w.current?.description)}</div>
+            <div class="flex gap-4 text-sm">
+              <span class="text-blue-600 font-medium">Wind: ${s(w.current?.wind_speed)}kt</span>
+              <span class="text-gray-500">Humidity: ${s(w.current?.humidity)}%</span>
+            </div>
+            ${(w.current?.wind_speed || 0) > 20 ? '<div class="mt-2 text-red-500 font-semibold text-sm">Strong winds — check conditions</div>' : ''}
+          </div>`).join("")}
+      </div></div>`;
+  }
+
+  if (realData.marinas?.length) {
+    panels += `<div class="mb-8 bg-gradient-to-br from-gold-light/30 to-cream rounded-3xl p-8 shadow-xl">
+      <h3 class="text-3xl font-bold text-ocean-blue mb-6 font-heading">Nearby Marinas</h3>
+      <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
+        ${realData.marinas.map(m => `
+          <div class="bg-white rounded-2xl p-5 shadow-sm border-l-4 border-gold-bright hover:shadow-lg transition-shadow">
+            <h4 class="font-bold text-gray-800 mb-1">${s(m.name)}</h4>
+            <div class="text-sm text-gray-500 mb-2">${s(m.address)}</div>
+            <div class="flex items-center gap-2">
+              <span class="text-gold-bright font-bold">${s(m.rating)}/5</span>
+              <span class="text-xs text-gray-400">(${s(m.reviews)} reviews)</span>
+            </div>
+          </div>`).join("")}
+      </div></div>`;
+  }
+
+  if (realData.yacht) {
+    panels += `<div class="mb-8 bg-ocean-blue/5 rounded-3xl p-6 border border-ocean-blue/20">
+      <div class="flex items-center gap-3">
+        <span class="text-2xl">⛵</span>
+        <div>
+          <div class="font-bold text-ocean-blue">Planning for: ${s(realData.yacht.name, "Your Yacht")}</div>
+          <div class="text-sm text-gray-600">${[realData.yacht.type, realData.yacht.length].filter(Boolean).join(" - ")}</div>
+        </div>
+      </div>
+    </div>`;
+  }
+
+  return panels;
 }
 
 async function fetchAndDisplayServices({ query }) {
@@ -295,7 +350,7 @@ async function sendMessage(message) {
     else if (aiResponse.chat_response) addMessageToChat(aiResponse.chat_response, false);
 
     if (aiResponse.action === "tripPlan" && aiResponse.plan) {
-      renderTripPlan(aiResponse.plan);
+      renderTripPlan(aiResponse.plan, aiResponse.realData);
     } else if (aiResponse.action === "serviceSearch" && aiResponse.parameters?.query) {
       await fetchAndDisplayServices(aiResponse.parameters);
     }

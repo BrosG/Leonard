@@ -5,9 +5,11 @@ RUN apt-get update -y && apt-get install -y openssl && rm -rf /var/lib/apt/lists
 WORKDIR /app
 
 COPY package.json package-lock.json ./
-RUN npm ci --omit=dev
+COPY scripts/ ./scripts/
+COPY public/ ./public/
+COPY prisma/ ./prisma/
 
-COPY prisma ./prisma/
+RUN npm ci --omit=dev
 RUN npx prisma generate
 
 # Production stage
@@ -20,11 +22,10 @@ WORKDIR /app
 
 COPY --from=builder --chown=leonard:nodejs /app/node_modules ./node_modules
 COPY --from=builder --chown=leonard:nodejs /app/prisma ./prisma
+COPY --from=builder --chown=leonard:nodejs /app/public ./public
 COPY --chown=leonard:nodejs package.json ./
 COPY --chown=leonard:nodejs server.js ./
 COPY --chown=leonard:nodejs api/ ./api/
-COPY --chown=leonard:nodejs scripts/ ./scripts/
-COPY --chown=leonard:nodejs public/ ./public/
 
 USER leonard
 EXPOSE 8080

@@ -33,9 +33,96 @@ app.use(cors({
 }));
 app.use(express.json({ limit: '100kb' }));
 
+// ========== UTILITY SERVICES ==========
+
+// Fetch weather for a location (OpenWeatherMap free tier)
+async function getWeather(location) {
+  const key = process.env.OPENWEATHER_API_KEY;
+  if (!key) return null;
+  try {
+    const geoUrl = `https://api.openweathermap.org/geo/1.0/direct?q=${encodeURIComponent(location)}&limit=1&appid=${key}`;
+    const geoRes = await fetch(geoUrl);
+    const geoData = await geoRes.json();
+    if (!geoData?.[0]) return null;
+    const { lat, lon } = geoData[0];
+    const weatherUrl = `https://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${lon}&units=metric&cnt=8&appid=${key}`;
+    const weatherRes = await fetch(weatherUrl);
+    const weatherData = await weatherRes.json();
+    if (weatherData.cod !== '200') return null;
+    return {
+      location,
+      current: {
+        temp: Math.round(weatherData.list[0].main.temp),
+        feels_like: Math.round(weatherData.list[0].main.feels_like),
+        description: weatherData.list[0].weather[0].description,
+        wind_speed: Math.round(weatherData.list[0].wind.speed * 1.944), // m/s to knots
+        wind_dir: weatherData.list[0].wind.deg,
+        humidity: weatherData.list[0].main.humidity,
+      },
+      forecast: weatherData.list.slice(0, 5).map(f => ({
+        time: f.dt_txt,
+        temp: Math.round(f.main.temp),
+        description: f.weather[0].description,
+        wind_knots: Math.round(f.wind.speed * 1.944),
+      })),
+    };
+  } catch (e) {
+    console.warn('Weather fetch failed:', e.message);
+    return null;
+  }
+}
+
+// Fetch real marinas/services near a location via Google Places
+async function getPlacesNear(location, type = 'marina') {
+  const key = process.env.GOOGLE_PLACES_API_KEY || process.env.GOOGLE_API_KEY;
+  if (!key) return [];
+  try {
+    const query = `${type} near ${location}`;
+    const url = `https://maps.googleapis.com/maps/api/place/textsearch/json?query=${encodeURIComponent(query)}&key=${key}`;
+    const res = await fetch(url);
+    const data = await res.json();
+    if (data.status !== 'OK') return [];
+    return data.results.slice(0, 3).map(p => ({
+      name: p.name,
+      address: p.formatted_address,
+      rating: p.rating || 0,
+      reviews: p.user_ratings_total || 0,
+      lat: p.geometry?.location?.lat,
+      lng: p.geometry?.location?.lng,
+    }));
+  } catch (e) {
+    console.warn('Places fetch failed:', e.message);
+    return [];
+  }
+}
+
+// Get user's yacht profile for AI context
+async function getUserYachtProfile(uid) {
+  if (!uid) return null;
+  try {
+    const user = await prisma.user.findUnique({ where: { firebaseUid: uid } });
+    if (!user || (!user.yachtName && !user.yachtType)) return null;
+    return {
+      name: user.yachtName,
+      type: user.yachtType,
+      length: user.yachtLength,
+      homePort: user.homePort,
+    };
+  } catch (e) { return null; }
+}
+
 // Health check (public)
 app.get('/api/health', (req, res) => {
   res.json({ status: 'ok', service: 'leonard-api', timestamp: new Date().toISOString() });
+});
+
+// ========== WEATHER ENDPOINT ==========
+app.get('/api/weather', async (req, res) => {
+  const { location } = req.query;
+  if (!location) return res.status(400).json({ error: 'Location required' });
+  const weather = await getWeather(location);
+  if (!weather) return res.status(404).json({ error: 'Weather data unavailable' });
+  res.json(weather);
 });
 
 // Auth middleware - optional for generate-plan/get-services, required for user/trips
@@ -159,12 +246,38 @@ app.post('/api/generate-plan', async (req, res) => {
   const { prompt, language = 'en-US', planContext = {} } = req.body;
   if (!prompt?.trim()) return res.status(400).json({ error: 'A non-empty prompt is required.' });
 
+  // Gather real-world data to enrich AI context
+  const locations = prompt.match(/\b(?:Monaco|Cannes|Nice|Saint-Tropez|Ibiza|Miami|Bahamas|St\.?\s*Barth|Capri|Sardinia|Mykonos|Santorini|Dubrovnik|Antibes|Marbella|Palma|Mallorca|Corsica|Amalfi|Naples|Barcelona|Marseille|Malta|Montenegro|Split|Hvar|Key West|Nassau|Bimini|Turks|Virgin Islands|Anguilla|St\.?\s*Martin|Gustavia)\b/gi) || [];
+
+  // Fetch weather + nearby marinas in parallel for detected locations
+  const uniqueLocations = [...new Set(locations.map(l => l.trim()))].slice(0, 3);
+  const [weatherData, marinasData, yachtProfile] = await Promise.all([
+    Promise.all(uniqueLocations.map(loc => getWeather(loc))),
+    Promise.all(uniqueLocations.map(loc => getPlacesNear(loc, 'marina'))),
+    getUserYachtProfile(req.user?.uid),
+  ]);
+
+  const weatherContext = weatherData.filter(Boolean).map(w =>
+    `${w.location}: ${w.current.temp}°C, ${w.current.description}, wind ${w.current.wind_speed}kt`
+  ).join('\n');
+
+  const marinasContext = marinasData.flat().slice(0, 6).map(m =>
+    `${m.name} (${m.rating}/5, ${m.reviews} reviews) - ${m.address}`
+  ).join('\n');
+
+  const yachtContext = yachtProfile
+    ? `User's yacht: ${yachtProfile.name || 'unnamed'}, Type: ${yachtProfile.type || 'unknown'}, Length: ${yachtProfile.length || 'unknown'}, Home port: ${yachtProfile.homePort || 'unknown'}`
+    : '';
+
   const SYSTEM_PROMPT = `You are Leonard, an expert AI yacht concierge. You are PROACTIVE, CONTEXT-AWARE, and DECISIVE.
 
 # MOST IMPORTANT RULE
 IF USER MENTIONS TWO LOCATIONS, IT IS A TRIP REQUEST! Create the trip plan IMMEDIATELY.
 
 Current Context: ${JSON.stringify(planContext, null, 2)}
+${yachtContext ? `\n# USER'S YACHT\n${yachtContext}\nAdapt your recommendations to this yacht (draft, beam, fuel consumption, speed).` : ''}
+${weatherContext ? `\n# REAL-TIME WEATHER DATA\n${weatherContext}\nUse this real weather data in your response. Warn about strong winds (>20kt) or bad conditions.` : ''}
+${marinasContext ? `\n# REAL MARINAS & SERVICES NEARBY (from Google Places)\n${marinasContext}\nRecommend these REAL places by name in your itinerary. Include their ratings.` : ''}
 
 # DECISION TREE
 
@@ -281,6 +394,15 @@ CRITICAL: For tripPlan, every field shown above is REQUIRED. Use the EXACT key n
       } catch (e) {
         console.warn('Failed to save trip:', e.message);
       }
+    }
+
+    // Enrich response with real-world data
+    if (action === 'tripPlan') {
+      responseJson.realData = {
+        weather: weatherData.filter(Boolean),
+        marinas: marinasData.flat().slice(0, 6),
+        yacht: yachtProfile,
+      };
     }
 
     res.json(responseJson);
