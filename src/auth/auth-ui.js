@@ -10,9 +10,9 @@ export function createAuthModal() {
       <div class="bg-gradient-to-br from-navy-dark via-ocean-blue to-ocean-light p-8 text-center text-white relative overflow-hidden">
         <div class="absolute top-0 right-0 w-32 h-32 bg-gold-bright/10 rounded-full blur-2xl"></div>
         <span class="text-5xl block mb-3 relative z-10">⚓</span>
-        <h2 class="text-2xl font-bold font-heading relative z-10">Welcome to Leonard</h2>
+        <h2 class="text-2xl font-bold font-heading relative z-10">Save Your Perfect Voyage</h2>
         <div class="h-0.5 w-16 bg-gold-bright rounded-full mx-auto mt-2 mb-1"></div>
-        <p class="text-sm opacity-90 relative z-10">Your AI Yacht Concierge</p>
+        <p class="text-sm opacity-90 relative z-10">Unlimited plans, PDF exports, trip history</p>
       </div>
 
       <div class="p-8">

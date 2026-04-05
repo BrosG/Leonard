@@ -8,8 +8,8 @@ import { initAuthUI, showAuthModal, closeAuthModal, createUserMenu, initUserMenu
 
 const API_BASE_URL = import.meta.env.VITE_API_URL || "";
 
-// Free message counter - allow 3 messages before requiring login
-const FREE_MESSAGE_LIMIT = 3;
+// Free message counter - allow 5 messages before soft signup prompt
+const FREE_MESSAGE_LIMIT = 5;
 let messageCount = parseInt(sessionStorage.getItem("leonard_msg_count") || "0");
 
 function incrementMessageCount() {
@@ -85,7 +85,15 @@ function addMessageToChat(message, isUser = false) {
     messageDiv.dataset.raw = message;
   }
   chatMessages.appendChild(messageDiv);
-  chatMessages.scrollTo({ top: chatMessages.scrollHeight, behavior: "smooth" });
+
+  // Cap DOM to prevent memory/performance issues
+  const allMsgs = chatMessages.querySelectorAll(':scope > div');
+  if (allMsgs.length > 50) allMsgs[0].remove();
+
+  // Smooth scroll via rAF for 60fps
+  requestAnimationFrame(() => {
+    chatMessages.scrollTo({ top: chatMessages.scrollHeight, behavior: "smooth" });
+  });
   if (!isUser) document.getElementById("notification-sound")?.play().catch(() => {});
 }
 
@@ -322,10 +330,12 @@ async function fetchAndDisplayServices({ query }) {
 }
 
 window.yachtContext = window.yachtContext || {};
+let isSending = false;
 
 async function sendMessage(message) {
-  if (!message.trim()) return;
+  if (!message.trim() || isSending) return;
 
+  isSending = true;
   // Smart conversion: allow messages but gate full results after limit
   const atLimit = needsAuth();
   incrementMessageCount();
@@ -370,6 +380,22 @@ async function sendMessage(message) {
     console.error("Failed to get AI response:", error);
     removeTypingIndicator();
     addMessageToChat("I apologize, but I'm having trouble processing your request. Please try again.", false);
+  } finally {
+    isSending = false;
+  }
+}
+
+// Returning user detection
+function showRetentionBanner() {
+  const lastVisit = localStorage.getItem("leonard_last_visit");
+  const now = Date.now();
+  localStorage.setItem("leonard_last_visit", String(now));
+  if (!lastVisit) return;
+  const daysSince = (now - parseInt(lastVisit)) / (1000 * 60 * 60 * 24);
+  if (daysSince >= 1 && daysSince <= 30) {
+    setTimeout(() => {
+      addMessageToChat("Welcome back! Your saved plans are ready. Want to refine your last trip or start a new adventure?", false);
+    }, 2500);
   }
 }
 
@@ -377,7 +403,7 @@ function showWelcomeMessages() {
   setTimeout(() => {
     addMessageToChat("Hello! I'm Leonard, your AI yacht concierge.", false);
     setTimeout(() => {
-      addMessageToChat("I can help you:\n\nPlan complete yacht trips (try: 'Plan a trip from Monaco to Saint-Tropez')\nFind marinas, restaurants, services\nOrganize your perfect voyage\n\nWhat would you like to do today?", false);
+      addMessageToChat("I can help you:\n\n- **Plan complete yacht trips** with real weather and marina data\n- **Find marinas, restaurants, services** anywhere\n- **Get budget estimates** tailored to your yacht\n\nWhat would you like to do today?", false);
     }, 1200);
   }, 500);
 }
@@ -470,5 +496,6 @@ document.addEventListener("DOMContentLoaded", async () => {
   });
 
   showWelcomeMessages();
+  showRetentionBanner();
   console.log("Leonard AI Yacht Concierge is ready!");
 });
