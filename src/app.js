@@ -63,30 +63,43 @@ function addTypingIndicator() {
 
 const removeTypingIndicator = () => document.getElementById("typing-indicator")?.remove();
 
-// Render trip plan
+// Safe accessor — handles obj.key, obj as string, or fallback
+function s(val, fallback = "") {
+  if (val === undefined || val === null) return fallback;
+  if (typeof val === "object") return val.location || val.name || val.city || JSON.stringify(val);
+  return String(val);
+}
+
+// Render trip plan (defensive against any AI response shape)
 function renderTripPlan(plan) {
   const planSection = document.getElementById("yacht-plan-output");
   const planContainer = document.getElementById("plan-container");
   if (!planSection || !planContainer) return;
 
+  console.log("renderTripPlan received:", JSON.stringify(plan, null, 2));
+
+  const departure = typeof plan.departure === "object" ? (plan.departure.location || plan.departure.name || plan.departure.city || "") : s(plan.departure);
+  const destination = typeof plan.destination === "object" ? (plan.destination.location || plan.destination.name || plan.destination.city || "") : s(plan.destination);
+
   let dailyItineraryHTML = "";
-  if (plan.daily_itinerary && Array.isArray(plan.daily_itinerary)) {
-    dailyItineraryHTML = plan.daily_itinerary
+  const itinerary = plan.daily_itinerary || plan.dailyItinerary || plan.itinerary || [];
+  if (Array.isArray(itinerary)) {
+    dailyItineraryHTML = itinerary
       .map(
         (day) => `
       <div class="mb-8 bg-white rounded-3xl p-8 shadow-xl border-l-4 border-ocean-blue">
-        <h3 class="text-3xl font-bold text-ocean-blue mb-4">Day ${day.day}: ${day.title}</h3>
+        <h3 class="text-3xl font-bold text-ocean-blue mb-4">Day ${s(day.day, "")}: ${s(day.title, s(day.name, ""))}</h3>
         ${
           day.navigation
             ? `<div class="mb-6 bg-blue-50 rounded-2xl p-6">
-            <h4 class="text-xl font-bold text-gray-800 mb-3">⛵ Navigation Plan</h4>
+            <h4 class="text-xl font-bold text-gray-800 mb-3">Navigation Plan</h4>
             <div class="grid md:grid-cols-2 gap-4 text-sm">
-              <div><strong>From:</strong> ${day.navigation.departure_point}</div>
-              <div><strong>To:</strong> ${day.navigation.arrival_point}</div>
-              <div><strong>Distance:</strong> ${day.navigation.distance}</div>
-              <div><strong>Est. Time:</strong> ${day.navigation.estimated_time}</div>
+              <div><strong>From:</strong> ${s(day.navigation.departure_point, s(day.navigation.from, ""))}</div>
+              <div><strong>To:</strong> ${s(day.navigation.arrival_point, s(day.navigation.to, ""))}</div>
+              <div><strong>Distance:</strong> ${s(day.navigation.distance, "")}</div>
+              <div><strong>Est. Time:</strong> ${s(day.navigation.estimated_time, s(day.navigation.time, ""))}</div>
             </div>
-            ${day.navigation.route_notes ? `<p class="mt-3 text-gray-700"><strong>Notes:</strong> ${day.navigation.route_notes}</p>` : ""}
+            ${day.navigation.route_notes ? `<p class="mt-3 text-gray-700"><strong>Notes:</strong> ${s(day.navigation.route_notes)}</p>` : ""}
           </div>`
             : ""
         }
@@ -98,11 +111,11 @@ function renderTripPlan(plan) {
               .map(
                 (a) => `
               <div class="flex gap-4 p-4 bg-gray-50 rounded-xl">
-                <div class="font-bold text-ocean-blue min-w-[80px]">${a.time}</div>
+                <div class="font-bold text-ocean-blue min-w-[80px]">${s(a.time, "")}</div>
                 <div class="flex-1">
-                  <div class="font-semibold text-gray-800">${a.activity}</div>
-                  ${a.location ? `<div class="text-sm text-gray-600">${a.location}</div>` : ""}
-                  ${a.notes ? `<div class="text-sm text-gray-500 mt-1">${a.notes}</div>` : ""}
+                  <div class="font-semibold text-gray-800">${s(a.activity, s(a.name, s(a.description, "")))}</div>
+                  ${a.location ? `<div class="text-sm text-gray-600">${s(a.location)}</div>` : ""}
+                  ${a.notes ? `<div class="text-sm text-gray-500 mt-1">${s(a.notes)}</div>` : ""}
                 </div>
               </div>`
               )
@@ -114,60 +127,65 @@ function renderTripPlan(plan) {
             ? `<div class="mb-4">
             <h4 class="text-xl font-bold text-gray-800 mb-3">Dining</h4>
             <div class="grid md:grid-cols-3 gap-4">
-              <div class="p-4 bg-gradient-to-br from-yellow-50 to-orange-50 rounded-xl"><div class="font-bold text-gray-700">Breakfast</div><div class="text-sm text-gray-600">${day.dining.breakfast}</div></div>
-              <div class="p-4 bg-gradient-to-br from-green-50 to-teal-50 rounded-xl"><div class="font-bold text-gray-700">Lunch</div><div class="text-sm text-gray-600">${day.dining.lunch}</div></div>
-              <div class="p-4 bg-gradient-to-br from-purple-50 to-pink-50 rounded-xl"><div class="font-bold text-gray-700">Dinner</div><div class="text-sm text-gray-600">${day.dining.dinner}</div></div>
+              <div class="p-4 bg-gradient-to-br from-yellow-50 to-orange-50 rounded-xl"><div class="font-bold text-gray-700">Breakfast</div><div class="text-sm text-gray-600">${s(day.dining.breakfast, "On board")}</div></div>
+              <div class="p-4 bg-gradient-to-br from-green-50 to-teal-50 rounded-xl"><div class="font-bold text-gray-700">Lunch</div><div class="text-sm text-gray-600">${s(day.dining.lunch, "Local restaurant")}</div></div>
+              <div class="p-4 bg-gradient-to-br from-purple-50 to-pink-50 rounded-xl"><div class="font-bold text-gray-700">Dinner</div><div class="text-sm text-gray-600">${s(day.dining.dinner, "Marina dining")}</div></div>
             </div></div>`
             : ""
         }
-        ${day.overnight ? `<div class="mt-4 p-4 bg-indigo-50 rounded-xl"><strong class="text-gray-700">Overnight:</strong> <span class="text-gray-600">${day.overnight}</span></div>` : ""}
+        ${day.overnight ? `<div class="mt-4 p-4 bg-indigo-50 rounded-xl"><strong class="text-gray-700">Overnight:</strong> <span class="text-gray-600">${s(day.overnight)}</span></div>` : ""}
       </div>`
       )
       .join("");
   }
 
+  const route = plan.route || {};
+  const budget = plan.budget_estimate || plan.budget || {};
+  const notes = plan.important_notes || plan.notes || [];
+
   const html = `
     <div class="max-w-6xl mx-auto">
       <div class="text-center mb-12 bg-gradient-to-r from-ocean-blue to-ocean-light rounded-3xl p-10 text-white shadow-2xl">
-        <h2 class="text-5xl font-bold mb-4">${plan.title}</h2>
-        <div class="text-2xl opacity-90 mb-6">${plan.duration}</div>
+        <h2 class="text-5xl font-bold mb-4">${s(plan.title, "Your Yacht Trip")}</h2>
+        <div class="text-2xl opacity-90 mb-6">${s(plan.duration, "")}</div>
         <div class="grid md:grid-cols-2 gap-6 max-w-3xl mx-auto">
-          <div class="bg-white/10 backdrop-blur-sm rounded-2xl p-6"><div class="text-sm opacity-75 mb-2">Departure</div><div class="text-xl font-bold">${plan.departure.location}</div></div>
-          <div class="bg-white/10 backdrop-blur-sm rounded-2xl p-6"><div class="text-sm opacity-75 mb-2">Destination</div><div class="text-xl font-bold">${plan.destination.location}</div></div>
+          <div class="bg-white/10 backdrop-blur-sm rounded-2xl p-6"><div class="text-sm opacity-75 mb-2">Departure</div><div class="text-xl font-bold">${departure || "TBD"}</div></div>
+          <div class="bg-white/10 backdrop-blur-sm rounded-2xl p-6"><div class="text-sm opacity-75 mb-2">Destination</div><div class="text-xl font-bold">${destination || "TBD"}</div></div>
         </div>
       </div>
       ${
-        plan.route
+        route.total_distance || route.estimated_sailing_time || route.route_description
           ? `<div class="mb-8 bg-white rounded-3xl p-8 shadow-xl">
         <h3 class="text-3xl font-bold text-ocean-blue mb-6">Route Overview</h3>
         <div class="grid md:grid-cols-3 gap-6">
-          <div class="text-center p-6 bg-blue-50 rounded-2xl"><div class="text-4xl font-bold text-ocean-blue mb-2">${plan.route.total_distance}</div><div class="text-gray-600">Total Distance</div></div>
-          <div class="text-center p-6 bg-cyan-50 rounded-2xl"><div class="text-4xl font-bold text-ocean-blue mb-2">${plan.route.estimated_sailing_time}</div><div class="text-gray-600">Sailing Time</div></div>
-          <div class="text-center p-6 bg-blue-50 rounded-2xl flex items-center justify-center"><div class="text-gray-700">${plan.route.route_description}</div></div>
+          <div class="text-center p-6 bg-blue-50 rounded-2xl"><div class="text-4xl font-bold text-ocean-blue mb-2">${s(route.total_distance, route.distance || "—")}</div><div class="text-gray-600">Total Distance</div></div>
+          <div class="text-center p-6 bg-cyan-50 rounded-2xl"><div class="text-4xl font-bold text-ocean-blue mb-2">${s(route.estimated_sailing_time, route.sailing_time || "—")}</div><div class="text-gray-600">Sailing Time</div></div>
+          <div class="text-center p-6 bg-blue-50 rounded-2xl flex items-center justify-center"><div class="text-gray-700">${s(route.route_description, route.description || "")}</div></div>
         </div></div>`
           : ""
       }
-      <div class="mb-8"><h3 class="text-4xl font-bold text-ocean-blue mb-8">Daily Itinerary</h3>${dailyItineraryHTML}</div>
+      ${dailyItineraryHTML ? `<div class="mb-8"><h3 class="text-4xl font-bold text-ocean-blue mb-8">Daily Itinerary</h3>${dailyItineraryHTML}</div>` : ""}
       ${
-        plan.budget_estimate
+        budget.total || budget.marina_fees
           ? `<div class="mb-8 bg-gradient-to-br from-green-50 to-emerald-50 rounded-3xl p-8 shadow-xl border-2 border-green-200">
         <h3 class="text-3xl font-bold text-gray-800 mb-6">Budget Estimate</h3>
         <div class="grid md:grid-cols-2 gap-4 mb-6">
-          <div class="flex justify-between p-4 bg-white rounded-xl"><span class="text-gray-700">Marina Fees</span><span class="font-bold">${plan.budget_estimate.marina_fees}</span></div>
-          <div class="flex justify-between p-4 bg-white rounded-xl"><span class="text-gray-700">Fuel</span><span class="font-bold">${plan.budget_estimate.fuel}</span></div>
-          <div class="flex justify-between p-4 bg-white rounded-xl"><span class="text-gray-700">Food & Beverage</span><span class="font-bold">${plan.budget_estimate.food_and_beverage}</span></div>
-          <div class="flex justify-between p-4 bg-white rounded-xl"><span class="text-gray-700">Activities</span><span class="font-bold">${plan.budget_estimate.activities}</span></div>
+          ${budget.marina_fees ? `<div class="flex justify-between p-4 bg-white rounded-xl"><span class="text-gray-700">Marina Fees</span><span class="font-bold">${s(budget.marina_fees)}</span></div>` : ""}
+          ${budget.fuel ? `<div class="flex justify-between p-4 bg-white rounded-xl"><span class="text-gray-700">Fuel</span><span class="font-bold">${s(budget.fuel)}</span></div>` : ""}
+          ${budget.food_and_beverage || budget.food ? `<div class="flex justify-between p-4 bg-white rounded-xl"><span class="text-gray-700">Food & Beverage</span><span class="font-bold">${s(budget.food_and_beverage || budget.food)}</span></div>` : ""}
+          ${budget.activities ? `<div class="flex justify-between p-4 bg-white rounded-xl"><span class="text-gray-700">Activities</span><span class="font-bold">${s(budget.activities)}</span></div>` : ""}
         </div>
-        <div class="flex justify-between p-6 bg-gradient-to-r from-ocean-blue to-ocean-light rounded-2xl text-white text-2xl">
-          <span class="font-bold">Total Estimate</span><span class="font-bold">${plan.budget_estimate.total}</span>
-        </div></div>`
+        ${budget.total ? `<div class="flex justify-between p-6 bg-gradient-to-r from-ocean-blue to-ocean-light rounded-2xl text-white text-2xl">
+          <span class="font-bold">Total Estimate</span><span class="font-bold">${s(budget.total)}</span>
+        </div>` : ""}
+        </div>`
           : ""
       }
       ${
-        plan.important_notes?.length
+        notes.length
           ? `<div class="bg-yellow-50 border-2 border-yellow-300 rounded-3xl p-8 shadow-xl">
         <h3 class="text-3xl font-bold text-gray-800 mb-6">Important Notes</h3>
-        <ul class="space-y-3">${plan.important_notes.map((n) => `<li class="flex items-start gap-3"><span class="text-yellow-600 text-xl mt-1">&bull;</span><span class="text-gray-700 flex-1">${n}</span></li>`).join("")}</ul></div>`
+        <ul class="space-y-3">${notes.map((n) => `<li class="flex items-start gap-3"><span class="text-yellow-600 text-xl mt-1">&bull;</span><span class="text-gray-700 flex-1">${s(n)}</span></li>`).join("")}</ul></div>`
           : ""
       }
     </div>`;

@@ -152,17 +152,74 @@ IF USER MENTIONS TWO LOCATIONS, IT IS A TRIP REQUEST! Create the trip plan IMMED
 Current Context: ${JSON.stringify(planContext, null, 2)}
 
 # DECISION TREE
+
 ## RULE #1: TRIP PLANNING (two locations detected)
-Generate action: "tripPlan" with full itinerary.
+Generate action: "tripPlan" with a "plan" object. The plan MUST follow this EXACT structure:
+{
+  "action": "tripPlan",
+  "message": "Short confirmation message",
+  "plan": {
+    "title": "Trip Title",
+    "duration": "X Days",
+    "departure": { "location": "City, Country" },
+    "destination": { "location": "City, Country" },
+    "route": {
+      "total_distance": "XX nautical miles",
+      "estimated_sailing_time": "XX hours",
+      "route_description": "Brief route description"
+    },
+    "daily_itinerary": [
+      {
+        "day": 1,
+        "title": "Day title",
+        "navigation": {
+          "departure_point": "From location",
+          "arrival_point": "To location",
+          "distance": "XX NM",
+          "estimated_time": "XX hours",
+          "route_notes": "Notes"
+        },
+        "activities": [
+          { "time": "09:00", "activity": "Description", "location": "Place", "notes": "Optional" }
+        ],
+        "dining": {
+          "breakfast": "Description",
+          "lunch": "Description",
+          "dinner": "Description"
+        },
+        "overnight": "Marina or anchorage name"
+      }
+    ],
+    "budget_estimate": {
+      "marina_fees": "€XXX",
+      "fuel": "€XXX",
+      "food_and_beverage": "€XXX",
+      "activities": "€XXX",
+      "total": "€X,XXX"
+    },
+    "important_notes": ["Note 1", "Note 2"]
+  }
+}
+
 ## RULE #2: SERVICE SEARCH (find X in Y)
 Generate action: "serviceSearch" with parameters.query
+{
+  "action": "serviceSearch",
+  "message": "Searching for...",
+  "parameters": { "query": "search query string" }
+}
+
 ## RULE #3: GREETING
 Generate action: "message" with friendly yacht concierge response.
-## RULE #4: GENERAL
-Generate action: "message" with helpful response.
 
-Response: valid JSON with action, message/chat_response, optionally plan/parameters/yacht_context.
-For tripPlan include: title, duration, departure, destination, route, daily_itinerary, provisioning, activities_suggestions, budget_estimate, important_notes.`;
+## RULE #4: GENERAL CONVERSATION
+Generate action: "message" with helpful response.
+{
+  "action": "message",
+  "chat_response": "Your response text"
+}
+
+CRITICAL: For tripPlan, every field shown above is REQUIRED. Use the EXACT key names. Do NOT use null or omit fields — provide real estimated values.`;
 
   const LANG = { 'en-US': 'Respond in English.', fr: 'Réponds en français.', es: 'Responde en español.' };
   const fullPrompt = `${SYSTEM_PROMPT}\n\n${LANG[language] || LANG['en-US']}\n\nUser: "${prompt}"`;
