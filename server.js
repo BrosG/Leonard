@@ -15,8 +15,23 @@ const prisma = new PrismaClient();
 const app = express();
 const PORT = process.env.PORT || 8080;
 
-app.use(cors({ origin: true }));
-app.use(express.json());
+// CORS whitelist
+const ALLOWED_ORIGINS = [
+  'https://leonardaccess.com',
+  'https://www.leonardaccess.com',
+  'https://leonardaccess-233f8.web.app',
+  'https://leonardaccess-233f8.firebaseapp.com',
+  'http://localhost:5173',
+  'http://localhost:3000',
+];
+app.use(cors({
+  origin: (origin, cb) => {
+    if (!origin || ALLOWED_ORIGINS.includes(origin)) cb(null, true);
+    else cb(new Error('Not allowed by CORS'));
+  },
+  credentials: true,
+}));
+app.use(express.json({ limit: '100kb' }));
 
 // Health check (public)
 app.get('/api/health', (req, res) => {
@@ -222,7 +237,10 @@ Generate action: "message" with helpful response.
 CRITICAL: For tripPlan, every field shown above is REQUIRED. Use the EXACT key names. Do NOT use null or omit fields — provide real estimated values.`;
 
   const LANG = { 'en-US': 'Respond in English.', fr: 'Réponds en français.', es: 'Responde en español.' };
-  const fullPrompt = `${SYSTEM_PROMPT}\n\n${LANG[language] || LANG['en-US']}\n\nUser: "${prompt}"`;
+  // Sanitize user input to prevent prompt injection
+  const sanitized = prompt.slice(0, 2000).replace(/[`${}\\]/g, '');
+  const validLang = ['en-US', 'fr', 'es'].includes(language) ? language : 'en-US';
+  const fullPrompt = `${SYSTEM_PROMPT}\n\n${LANG[validLang]}\n\nUser Message:\n\`\`\`\n${sanitized}\n\`\`\``;
 
   try {
     const genAI = new GoogleGenerativeAI(apiKey);
@@ -231,7 +249,9 @@ CRITICAL: For tripPlan, every field shown above is REQUIRED. Use the EXACT key n
       generationConfig: { response_mime_type: 'application/json', temperature: 0.8, maxOutputTokens: 4000 },
     });
 
-    const result = await model.generateContent(fullPrompt);
+    // Add timeout to Gemini API call
+    const timeoutPromise = new Promise((_, reject) => setTimeout(() => reject(new Error('AI request timeout')), 30000));
+    const result = await Promise.race([model.generateContent(fullPrompt), timeoutPromise]);
     const text = result.response.text();
     const cleanedText = text.replace(/^```json\s*/, '').replace(/\s*```$/, '').trim();
     const responseJson = JSON.parse(cleanedText);
@@ -303,7 +323,19 @@ app.post('/api/get-services', async (req, res) => {
   }
 });
 
-// Start server
-app.listen(PORT, () => {
+// Start server with graceful shutdown
+const server = app.listen(PORT, () => {
   console.log(`Leonard API running on port ${PORT}`);
 });
+
+async function shutdown(signal) {
+  console.log(`${signal} received, shutting down...`);
+  server.close(async () => {
+    await prisma.$disconnect();
+    console.log('Connections closed');
+    process.exit(0);
+  });
+  setTimeout(() => process.exit(1), 10000);
+}
+process.on('SIGTERM', () => shutdown('SIGTERM'));
+process.on('SIGINT', () => shutdown('SIGINT'));

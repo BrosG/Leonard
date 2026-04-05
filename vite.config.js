@@ -9,6 +9,10 @@ export default defineConfig(({ mode }) => {
 
   return {
     publicDir: 'public',
+    // Exclude server-only packages from browser bundle
+    optimizeDeps: {
+      exclude: ['firebase-admin', '@prisma/client', 'express', 'cors'],
+    },
     css: {
       postcss: {
         plugins: [
@@ -19,7 +23,15 @@ export default defineConfig(({ mode }) => {
     },
     build: {
       outDir: 'dist',
-      sourcemap: true,
+      sourcemap: false,
+      rollupOptions: {
+        output: {
+          manualChunks: {
+            firebase: ['firebase/app', 'firebase/auth'],
+            i18n: ['i18next', 'i18next-http-backend'],
+          },
+        },
+      },
     },
   };
 });

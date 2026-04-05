@@ -96,17 +96,17 @@
                     💬 <span data-i18n="nav.whatsapp">WhatsApp</span>
                 </a>
                 <div class="flex items-center space-x-3 border-l pl-6 ml-2 border-blue-200">
-                    <button id="lang-fr" data-lang="fr" class="lang-btn">🇫🇷</button>
-                    <button id="lang-en-US" data-lang="en-US" class="lang-btn active">🇺🇸</button>
-                    <button id="lang-es" data-lang="es" class="lang-btn">🇪🇸</button>
+                    <button id="lang-fr" data-lang="fr" class="lang-btn" aria-label="Français">🇫🇷</button>
+                    <button id="lang-en-US" data-lang="en-US" class="lang-btn active" aria-label="English">🇺🇸</button>
+                    <button id="lang-es" data-lang="es" class="lang-btn" aria-label="Español">🇪🇸</button>
                 </div>
                 <!-- Auth Container -->
                 <div id="auth-container" class="border-l pl-6 ml-2 border-blue-200">
-                    <button id="login-btn" class="btn bg-ocean-blue hover:bg-ocean-light text-white text-sm px-4 py-2 rounded-xl">Sign In</button>
+                    <button id="login-btn" class="btn bg-ocean-blue hover:bg-ocean-light text-white text-sm px-4 py-2 rounded-xl focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-ocean-blue">Sign In</button>
                 </div>
             </div>
             <div class="md:hidden">
-                <button id="mobile-menu-btn" class="text-text-dark focus:outline-none">
+                <button id="mobile-menu-btn" class="text-text-dark focus:outline-none focus:ring-2 focus:ring-ocean-blue rounded" aria-label="Toggle navigation menu" aria-expanded="false">
                     <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path></svg>
                 </button>
             </div>
@@ -231,7 +231,7 @@
                 </div>
 
                 <!-- Social Proof - Very Compact -->
-                <div class="mt-8 flex flex-wrap justify-center items-center gap-6 text-xs text-gray-400">
+                <div class="mt-8 flex flex-wrap justify-center items-center gap-6 text-xs text-gray-600">
                     <div class="flex items-center gap-2">
                         <span class="text-lg">⭐⭐⭐⭐⭐</span>
                         <span data-i18n="hero.social1">5,000+ Happy Yacht Owners</span>

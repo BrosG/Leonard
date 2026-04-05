@@ -34,16 +34,23 @@ async function apiFetch(url, options = {}) {
 }
 
 // --- Helper functions ---
+// Sanitize HTML to prevent XSS from AI responses or user input
+function sanitize(str) {
+  const div = document.createElement("div");
+  div.textContent = str;
+  return div.innerHTML;
+}
+
 function addMessageToChat(message, isUser = false) {
   const chatMessages = document.getElementById("chat-messages");
   if (!chatMessages) return;
   const messageDiv = document.createElement("div");
   if (isUser) {
     messageDiv.className = "flex items-end justify-end space-x-2 animate-fade-in";
-    messageDiv.innerHTML = `<div class="flex-1 flex justify-end"><div class="chat-bubble-user"><p class="text-white">${message}</p></div></div>`;
+    messageDiv.innerHTML = `<div class="flex-1 flex justify-end"><div class="chat-bubble-user"><p class="text-white">${sanitize(message)}</p></div></div>`;
   } else {
     messageDiv.className = "flex items-end space-x-2 animate-fade-in";
-    messageDiv.innerHTML = `<div class="flex-shrink-0"><img src="/images/leonard-avatar.jpg" alt="Leonard" class="w-10 h-10 rounded-full object-cover border-2 border-blue-300 shadow-lg"/></div><div class="flex-1"><div class="chat-bubble-ai"><p class="text-gray-800 whitespace-pre-line text-sm">${message}</p></div></div>`;
+    messageDiv.innerHTML = `<div class="flex-shrink-0"><img src="/images/leonard-avatar.jpg" alt="Leonard AI concierge" class="w-10 h-10 rounded-full object-cover border-2 border-blue-300 shadow-lg"/></div><div class="flex-1"><div class="chat-bubble-ai"><p class="text-gray-800 whitespace-pre-line text-sm">${sanitize(message)}</p></div></div>`;
   }
   chatMessages.appendChild(messageDiv);
   chatMessages.scrollTo({ top: chatMessages.scrollHeight, behavior: "smooth" });
@@ -56,6 +63,8 @@ function addTypingIndicator() {
   const typingDiv = document.createElement("div");
   typingDiv.id = "typing-indicator";
   typingDiv.className = "flex items-end space-x-2";
+  typingDiv.setAttribute("aria-live", "polite");
+  typingDiv.setAttribute("aria-label", "Leonard is typing");
   typingDiv.innerHTML = `<div class="flex-shrink-0"><img src="/images/leonard-avatar.jpg" alt="Leonard" class="w-10 h-10 rounded-full object-cover border-2 border-blue-300"/></div><div class="flex-1"><div class="chat-bubble-ai"><div class="flex items-center space-x-1"><div class="w-2 h-2 bg-ocean-blue rounded-full animate-bounce"></div><div class="w-2 h-2 bg-ocean-blue rounded-full animate-bounce" style="animation-delay:0.1s"></div><div class="w-2 h-2 bg-ocean-blue rounded-full animate-bounce" style="animation-delay:0.2s"></div></div></div></div>`;
   chatMessages.appendChild(typingDiv);
   chatMessages.scrollTo({ top: chatMessages.scrollHeight, behavior: "smooth" });
@@ -318,7 +327,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   input?.addEventListener("keypress", (e) => {
     if (e.key === "Enter" && !e.shiftKey) { e.preventDefault(); handleSend(); }
   });
-  input?.addEventListener("input", () => { input.style.height = "auto"; input.style.height = input.scrollHeight + "px"; });
+  input?.addEventListener("input", () => { input.style.height = "auto"; input.style.height = Math.min(input.scrollHeight, 120) + "px"; });
 
   document.querySelectorAll(".lang-btn").forEach((btn) => {
     btn.addEventListener("click", async () => {

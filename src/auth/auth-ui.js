@@ -76,15 +76,19 @@ function showError(msg) {
   if (el) {
     el.textContent = msg;
     el.classList.remove("hidden");
-    setTimeout(() => el.classList.add("hidden"), 5000);
+    setTimeout(() => el.classList.add("hidden"), 8000);
   }
 }
 
 function setLoading(loading) {
   const el = document.getElementById("auth-loading");
   if (el) el.classList.toggle("hidden", !loading);
+  // Disable all interactive elements during loading
   document.getElementById("auth-google-btn")?.toggleAttribute("disabled", loading);
   document.getElementById("auth-phone-btn")?.toggleAttribute("disabled", loading);
+  document.getElementById("auth-verify-btn")?.toggleAttribute("disabled", loading);
+  document.getElementById("auth-phone-input")?.toggleAttribute("disabled", loading);
+  document.getElementById("auth-otp-input")?.toggleAttribute("disabled", loading);
 }
 
 export function initAuthUI() {
@@ -144,7 +148,12 @@ export function initAuthUI() {
 }
 
 export function showAuthModal() {
-  document.getElementById("auth-modal")?.classList.remove("hidden");
+  const modal = document.getElementById("auth-modal");
+  if (modal) {
+    modal.classList.remove("hidden");
+    // Focus first interactive element
+    setTimeout(() => document.getElementById("auth-google-btn")?.focus(), 100);
+  }
 }
 
 export function closeAuthModal() {
