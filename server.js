@@ -286,7 +286,7 @@ CRITICAL: For tripPlan, every field shown above is REQUIRED. Use the EXACT key n
     res.json(responseJson);
   } catch (error) {
     console.error('generate-plan error:', error);
-    res.status(500).json({ action: 'error', message: 'I encountered an issue. Please try again.', error: error.message });
+    res.status(500).json({ action: 'error', message: 'I encountered an issue. Please try again.' });
   }
 });
 
@@ -313,13 +313,33 @@ app.post('/api/get-services', async (req, res) => {
       address: place.formatted_address,
       rating: place.rating || 0,
       ratingsTotal: place.user_ratings_total || 0,
-      photoUrl: place.photos?.[0] ? `https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photoreference=${place.photos[0].photo_reference}&key=${API_KEY}` : null,
+      // Use proxy URL to avoid exposing API key to client
+      photoUrl: place.photos?.[0] ? `/api/place-photo/${place.photos[0].photo_reference}` : null,
     }));
 
     res.json(services.slice(0, 10));
   } catch (error) {
     console.error('get-services error:', error);
     res.status(500).json({ error: 'Failed to fetch service information.' });
+  }
+});
+
+// ========== PLACE PHOTO PROXY (avoids exposing API key to client) ==========
+app.get('/api/place-photo/:ref', async (req, res) => {
+  const API_KEY = process.env.GOOGLE_PLACES_API_KEY || process.env.GOOGLE_API_KEY;
+  if (!API_KEY) return res.status(500).end();
+  try {
+    const photoRef = req.params.ref.replace(/[^a-zA-Z0-9_-]/g, '');
+    const response = await fetch(
+      `https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photoreference=${photoRef}&key=${API_KEY}`
+    );
+    if (!response.ok) return res.status(404).end();
+    res.set('Content-Type', response.headers.get('content-type') || 'image/jpeg');
+    res.set('Cache-Control', 'public, max-age=86400');
+    const buffer = Buffer.from(await response.arrayBuffer());
+    res.send(buffer);
+  } catch (e) {
+    res.status(500).end();
   }
 });
 
