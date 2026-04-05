@@ -7,10 +7,12 @@ export function createAuthModal() {
   modal.innerHTML = `
     <div class="bg-white rounded-3xl shadow-2xl w-full max-w-md mx-4 overflow-hidden">
       <!-- Header -->
-      <div class="bg-gradient-to-r from-ocean-blue to-ocean-light p-8 text-center text-white">
-        <span class="text-5xl block mb-3">⚓</span>
-        <h2 class="text-2xl font-bold font-heading">Welcome to Leonard</h2>
-        <p class="text-sm opacity-90 mt-1">Your AI Yacht Concierge</p>
+      <div class="bg-gradient-to-br from-navy-dark via-ocean-blue to-ocean-light p-8 text-center text-white relative overflow-hidden">
+        <div class="absolute top-0 right-0 w-32 h-32 bg-gold-bright/10 rounded-full blur-2xl"></div>
+        <span class="text-5xl block mb-3 relative z-10">⚓</span>
+        <h2 class="text-2xl font-bold font-heading relative z-10">Welcome to Leonard</h2>
+        <div class="h-0.5 w-16 bg-gold-bright rounded-full mx-auto mt-2 mb-1"></div>
+        <p class="text-sm opacity-90 relative z-10">Your AI Yacht Concierge</p>
       </div>
 
       <div class="p-8">

@@ -186,12 +186,17 @@ function renderTripPlan(plan) {
 
   const html = `
     <div class="max-w-6xl mx-auto">
-      <div class="text-center mb-12 bg-gradient-to-r from-ocean-blue to-ocean-light rounded-3xl p-10 text-white shadow-2xl">
-        <h2 class="text-5xl font-bold mb-4">${s(plan.title, "Your Yacht Trip")}</h2>
-        <div class="text-2xl opacity-90 mb-6">${s(plan.duration, "")}</div>
-        <div class="grid md:grid-cols-2 gap-6 max-w-3xl mx-auto">
-          <div class="bg-white/10 backdrop-blur-sm rounded-2xl p-6"><div class="text-sm opacity-75 mb-2">Departure</div><div class="text-xl font-bold">${departure || "TBD"}</div></div>
-          <div class="bg-white/10 backdrop-blur-sm rounded-2xl p-6"><div class="text-sm opacity-75 mb-2">Destination</div><div class="text-xl font-bold">${destination || "TBD"}</div></div>
+      <div class="text-center mb-12 bg-gradient-to-b from-ocean-blue via-ocean-blue to-ocean-light rounded-3xl p-12 text-white shadow-2xl relative overflow-hidden">
+        <div class="absolute top-0 right-0 w-40 h-40 bg-gold-bright/10 rounded-full blur-3xl"></div>
+        <div class="absolute bottom-0 left-0 w-32 h-32 bg-aqua/10 rounded-full blur-3xl"></div>
+        <div class="relative z-10">
+          <h2 class="text-4xl md:text-5xl font-bold mb-3 font-heading">${s(plan.title, "Your Yacht Trip")}</h2>
+          <div class="h-1 w-20 bg-gold-bright rounded-full mx-auto mb-4"></div>
+          <div class="text-xl opacity-90 mb-8">${s(plan.duration, "")}</div>
+          <div class="grid md:grid-cols-2 gap-6 max-w-3xl mx-auto">
+            <div class="bg-white/10 backdrop-blur-md rounded-2xl p-6 border border-white/20"><div class="text-sm opacity-75 mb-2 font-semibold uppercase tracking-wider">Departure</div><div class="text-xl font-bold">${departure || "TBD"}</div></div>
+            <div class="bg-white/10 backdrop-blur-md rounded-2xl p-6 border border-white/20"><div class="text-sm opacity-75 mb-2 font-semibold uppercase tracking-wider">Destination</div><div class="text-xl font-bold">${destination || "TBD"}</div></div>
+          </div>
         </div>
       </div>
       ${
