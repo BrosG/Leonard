@@ -84,7 +84,7 @@ jobs:
             --min-instances=0 \
             --max-instances=10 \
             --set-env-vars="FIREBASE_PROJECT_ID=${{ env.PROJECT_ID }}" \
-            --set-secrets="GEMINI_API_KEY=GEMINI_API_KEY:latest,GOOGLE_PLACES_API_KEY=GOOGLE_PLACES_API_KEY:latest,DATABASE_URL=DATABASE_URL:latest" \
+            --set-secrets="GEMINI_API_KEY=GEMINI_API_KEY:latest,GOOGLE_PLACES_API_KEY=GOOGLE_PLACES_API_KEY:latest,DATABASE_URL=DATABASE_URL:latest,OPENWEATHER_API_KEY=OPENWEATHER_API_KEY:latest" \
             --quiet
 
       - name: Verify deployment health
