@@ -1,0 +1,44 @@
+generator client {
+  provider        = "prisma-client-js"
+  previewFeatures = ["driverAdapters"]
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = "file:./dev.db"
+}
+
+model User {
+  id          Int      @id @default(autoincrement())
+  firebaseUid String   @unique
+  email       String?
+  phone       String?
+  displayName String?
+  photoUrl    String?
+  provider    String?
+  yachtName   String?
+  yachtType   String?
+  yachtLength String?
+  homePort    String?
+  preferences String?  // JSON string for flexible preferences
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  trips       Trip[]
+}
+
+model Trip {
+  id             Int      @id @default(autoincrement())
+  userId         Int
+  user           User     @relation(fields: [userId], references: [id])
+  title          String
+  departure      String
+  destination    String
+  startDate      String?
+  endDate        String?
+  duration       String?
+  distance       String?
+  planData       String   // Full JSON plan from AI
+  status         String   @default("draft") // draft, planned, active, completed
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+}

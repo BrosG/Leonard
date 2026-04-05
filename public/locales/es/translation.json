@@ -1,0 +1,203 @@
+{
+  "pageTitle": "MyYachtConcierge.ai - Tu Asistente de Yate IA",
+  "nav": {
+    "features": "Características",
+    "services": "Servicios",
+    "pricing": "Precios",
+    "whatsapp": "WhatsApp"
+  },
+  "hero": {
+    "badge": "⚓ Impulsado por IA",
+    "title1": "Planifica Tu",
+    "title2": "Experiencia de Yate Perfecta",
+    "subtitle": "Chatea con Leonard, tu conserje de yates IA. ¡Obtén ayuda instantánea con todo lo marítimo! 🛥️",
+    "leonardRole": "Tu Conserje de Yates IA",
+    "trips": "Viajes",
+    "needHelp": "¿Necesitas asistencia personal?",
+    "whatsappBtn": "Chatear en WhatsApp",
+    "social1": "5,000+ Propietarios de Yates Felices",
+    "social2": "10,000+ Viajes Planificados",
+    "social3": "Respuestas IA Instantáneas"
+  },
+  "chat": {
+    "aiName": "Leonard, tu Conserje IA",
+    "aiStatus": "En línea",
+    "inputPlaceholder": "Cuéntame sobre tus planes de yate...",
+    "send": "Enviar",
+    "typing": "Leonard está escribiendo...",
+    "welcome1": "¡Ahoy! ⚓ Soy Leonard, tu conserje de yates IA.",
+    "welcome2": "¿Cómo puedo ayudarte hoy? Puedes pedirme consejo, encontrar un servicio específico como un mecánico en St. Tropez, o planificar un itinerario completo.",
+    "widgetTitle": "Chatear con Leonard",
+    "widgetInputPlaceholder": "Haz una pregunta...",
+    "placeholder": "Pregúntame cualquier cosa sobre yates...",
+    "example": "💡 Prueba: 'Encuentra marinas en Mónaco'",
+    "error": "Lo siento, tuve problemas para procesar eso. ¿Podrías reformularlo?",
+    "budgetSaved": "¡Perfecto! He actualizado tu presupuesto. ¡Tu plan se ve genial! ⚓"
+  },
+  "mobile": {
+    "servicePrompt": {
+      "title": "¡Encontremos Tus Servicios Marítimos!",
+      "subtitle": "Desliza para encontrar los mejores servicios para tu yate. ⚓"
+    },
+    "profile": {
+      "name": "Leonard",
+      "role": "Tu Conserje de Yates IA",
+      "status": "¡En línea y listo para ayudar! ⚓",
+      "detailsTitle": "Sobre Mí",
+      "detailsContent": "Soy tu conserje de yates IA dedicado, entrenado en miles de viajes exitosos. Mi objetivo es hacer que tu proceso de planificación marítima sea fluido y agradable. ¡Creemos juntos tu viaje perfecto!",
+      "statsTitle": "Estadísticas del Conserje",
+      "ownersHelped": "Propietarios Ayudados",
+      "tripsPlanned": "Viajes Planificados",
+      "avgRating": "Calificación Promedio"
+    }
+  },
+  "features": {
+    "title": "Tu Experiencia de Yate Perfecta, Simplificada",
+    "subtitle": "Nuestra IA maneja la logística marítima",
+    "ai": {
+      "title": "Impulsado por IA",
+      "desc": "Itinerarios personalizados instantáneos basados en tu viaje"
+    },
+    "money": {
+      "title": "Ahorra Dinero",
+      "desc": "Las herramientas de presupuesto inteligentes te ahorran miles vs conserjes tradicionales"
+    },
+    "time": {
+      "title": "Ahorra Tiempo",
+      "desc": "Obtén planes completos de yate en minutos, no semanas"
+    }
+  },
+  "services": {
+    "title": "Ayudamos con Todo lo Marítimo",
+    "subtitle": "Desde mantenimiento hasta gastronomía - ¡Leonard está aquí para ti!",
+    "askBtn": "Pregunta a Leonard",
+    "maintenance": {
+      "title": "Mantenimiento del Barco",
+      "desc": "Encuentra mecánicos marinos de confianza y servicios de barcos",
+      "question": "Necesito ayuda con el mantenimiento del barco"
+    },
+    "marina": {
+      "title": "Servicios de Marina",
+      "desc": "Descubre marinas perfectas con excelentes instalaciones",
+      "question": "¿Puedes recomendar una buena marina?"
+    },
+    "provisions": {
+      "title": "Provisiones y Catering",
+      "desc": "Aprovisionamiento gourmet y servicios de chef privado",
+      "question": "Necesito provisiones para mi yate"
+    },
+    "crew": {
+      "title": "Tripulación y Personal",
+      "desc": "Miembros de tripulación profesionales y personal de yate",
+      "question": "Ayúdame a encontrar miembros de tripulación"
+    },
+    "dining": {
+      "title": "Restaurantes Frente al Mar",
+      "desc": "Restaurantes exclusivos con amarre para yates",
+      "question": "¿Cuáles son los mejores restaurantes frente al mar?"
+    },
+    "experiences": {
+      "title": "Actividades Acuáticas",
+      "desc": "Buceo, pesca, deportes acuáticos y más",
+      "question": "¿Qué actividades acuáticas recomiendas?"
+    },
+    "concierge": {
+      "title": "Servicios de Conserjería",
+      "desc": "Transporte de lujo y planificación de eventos",
+      "question": "Necesito servicios de conserjería"
+    },
+    "fuel": {
+      "title": "Combustible y Suministros",
+      "desc": "Muelles de combustible y tiendas de suministros marinos",
+      "question": "¿Dónde puedo repostar mi yate?"
+    },
+    "whatsapp": {
+      "title": "¿Necesitas Asistencia Personal 1-a-1?",
+      "desc": "¡Chatea directamente con nuestros expertos en yates en WhatsApp para un servicio personalizado!",
+      "btn": "Iniciar Chat de WhatsApp Ahora",
+      "response": "Tiempo de respuesta promedio: Menos de 5 minutos"
+    }
+  },
+  "pricing": {
+    "trusted": "Con la confianza de 5,000+ Propietarios de Yates",
+    "title": "Inversión en Tu Viaje Perfecto",
+    "subtitle": "Elige el plan que coincida con tus sueños marítimos",
+    "limited": "TIEMPO LIMITADO",
+    "free": {
+      "name": "Gratis Para Siempre",
+      "perfect": "Perfecto para explorar",
+      "save": "Ahorra 20+ Horas",
+      "feat1": "Ilimitado",
+      "feat1b": "conversaciones IA",
+      "feat2": "Genera itinerarios de yate ilimitados",
+      "feat3": "Estimaciones de presupuesto inteligentes",
+      "feat4": "Sugerencias de servicios IA",
+      "cta": "Comenzar Gratis Ahora"
+    },
+    "pro": {
+      "badge": "MEJOR VALOR - 89% Elige Esto",
+      "name": "Plan Pro",
+      "payment": "Pago único • Acceso de por vida",
+      "save": "Ahorra 100+ Horas y $5,000+",
+      "feat1": "Todo en Gratis",
+      "feat2": "Exportaciones PDF hermosas",
+      "feat3": "Herramientas de presupuesto avanzadas",
+      "feat4": "Respuestas IA prioritarias",
+      "feat5": "Ahorra $5,000+ en errores de planificación",
+      "cta": "Obtener Pro Ahora - ¡Ahorra $50! 🎉",
+      "guarantee": "💳 Pago seguro • Garantía de devolución de dinero de 30 días",
+      "joined": "47 propietarios de yates se unieron hoy"
+    },
+    "premium": {
+      "badge": "PARA VIAJES SIN ESTRÉS",
+      "name": "Premium VIP",
+      "desc": "Solución completa de conserjería de yates",
+      "save": "Ahorra 200+ Horas y $10,000+",
+      "feat1": "Todo en Pro",
+      "feat2": "Consulta de video privada 1-a-1 (valor $200)",
+      "feat3": "Gestor de coordinación de tripulación",
+      "feat4": "Seguimiento de viaje en tiempo real",
+      "feat5": "Ahorra $10,000+ vs. conserje tradicional",
+      "cta": "Obtener Premium - ¡Ahorra $150! 👑"
+    }
+  },
+  "plan": {
+    "title": "Tu Itinerario de Yate Generado por IA",
+    "theme": "Tema",
+    "marina": "Marina",
+    "itinerary": "Itinerario",
+    "dining": "Experiencia Gastronómica",
+    "onboard": "Comida a Bordo",
+    "restaurants": "Restaurantes Recomendados",
+    "budget": "Desglose del Presupuesto",
+    "budgetTotal": "Costo Total Estimado",
+    "saveBudget": "Guardar Cambios de Presupuesto",
+    "services": "Servicios y Proveedores",
+    "packing": "Lista de Equipaje",
+    "changes": "¿Quieres Hacer Cambios?",
+    "refine": "¡Dime qué te gustaría ajustar y refinaré tu viaje perfecto!",
+    "continue": "Continuar Planificación"
+  },
+  "loading": {
+    "title": "Creando Tu Itinerario de Yate Perfecto ⚓",
+    "subtitle": "Leonard está trazando tu rumbo...",
+    "while": "⚓ Mientras esperas...",
+    "follow": "¡Síguenos para inspiración marítima diaria!"
+  },
+  "cta": {
+    "title": "¿Listo para crear tu viaje perfecto?",
+    "subtitle": "Únete a miles de propietarios de yates que han planificado sus viajes de ensueño con IA",
+    "start": "Comenzar a Planificar Ahora",
+    "whatsapp": "Chatear en WhatsApp"
+  },
+  "footer": {
+    "tagline": "Tu asistente conserje de yates impulsado por IA",
+    "product": "Producto",
+    "support": "Soporte",
+    "whatsapp": "Chat WhatsApp",
+    "faq": "FAQ",
+    "contact": "Contacto",
+    "follow": "Síguenos",
+    "copyright": "© 2024 MyYachtConcierge.ai. Todos los derechos reservados."
+  }
+}

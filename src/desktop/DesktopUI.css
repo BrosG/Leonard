@@ -1,0 +1,430 @@
+/**
+ * DesktopUI.css
+ *
+ * Custom styles for the Desktop UI components.
+ *
+ * This file complements Tailwind CSS by providing robust, explicit rules to ensure
+ * complex layouts like the scrollable chat interface and Tinder-style card stacks
+ * work correctly.
+ */
+
+/**
+ * ==========================================
+ * CRITICAL: Desktop Global Scroll Override
+ * ==========================================
+ * This ensures the page can scroll on desktop devices to view content
+ * below the fold (e.g., the generated yacht itinerary).
+ */
+
+@media (min-width: 768px) {
+  html, body {
+    overflow-y: auto !important;
+    overflow-x: hidden !important;
+    height: auto !important;
+    min-height: 100vh !important;
+    position: relative !important;
+  }
+}
+
+/*
+ * Main Chat Container Layout
+ * ---------------------------------------------
+ * These rules enforce the necessary flexbox properties for the main chat UI.
+ * While these are set with Tailwind classes in the HTML, defining them here
+ * provides a robust fallback and clearly documents the layout requirements.
+ * The container must have a defined height and hide overflow to allow its
+ * flex-1 child to become scrollable.
+ */
+#chat-container {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden; /* Critical: prevents flex children from expanding the parent */
+}
+
+/*
+ * Floating Chat Widget Layout
+ * ---------------------------------------------
+ * Similar to the main chat container, the floating widget must be a flex column
+ * for its message area to scroll correctly. Transitions are added for smooth
+ * resizing when the widget is minimized or expanded.
+ */
+#fixed-chat-widget {
+  display: flex;
+  flex-direction: column;
+  transition: width 0.3s ease-in-out, height 0.3s ease-in-out, transform 0.3s ease-in-out;
+}
+
+/*
+ * Chat Widget Minification Styles
+ * ---------------------------------------------
+ * These rules control the appearance of the chat widget when it is minimized.
+ * The `.chat-widget-minimized` class is toggled via JavaScript to apply these styles.
+ */
+#fixed-chat-widget.chat-widget-minimized {
+  /* Shrink the widget to just the header size */
+  height: 64px; /* Corresponds to h-16 in Tailwind */
+  width: 320px; /* A slightly smaller width for the minimized state */
+  overflow: hidden; /* Prevent content from spilling out during transition */
+}
+
+/* Hide the message area when minimized */
+#fixed-chat-widget.chat-widget-minimized #widget-chat-messages {
+  display: none;
+}
+
+/* Hide the input form when minimized */
+#fixed-chat-widget.chat-widget-minimized .border-t {
+  display: none;
+}
+
+
+/*
+ * Flexbox Scrolling Fix
+ * ---------------------------------------------
+ * This is the most critical rule for making a flex child scrollable.
+ * A flex item's default min-size is its content size. By setting `min-height: 0`,
+ * we allow the item to shrink smaller than its content, which in turn enables
+ * the `overflow-y: auto` property to activate when content is too large.
+ */
+#chat-messages,
+#widget-chat-messages {
+  min-height: 0;
+  overflow-y: auto; /* Enable vertical scrolling for the message list */
+  flex-grow: 1; /* Ensures the container fills the available vertical space */
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+/*
+ * Custom Scrollbar Styling
+ * ---------------------------------------------
+ * This enhances the visual appeal of all scrollable areas, making them consistent
+ * with the application's color palette. These are global styles.
+ */
+
+/* For Webkit-based browsers (Chrome, Safari, Edge, etc.) */
+::-webkit-scrollbar {
+  width: 12px;
+}
+
+::-webkit-scrollbar-track {
+  background: #dbeafe;
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(to bottom, #0c4a6e, #0369a1);
+  border-radius: 10px;
+  border: 2px solid #dbeafe; /* Creates a padding effect around the thumb */
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(to bottom, #075985, #0c4a6e); /* A slightly darker blue gradient on hover */
+}
+
+/* For Firefox */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: #0c4a6e #dbeafe; /* thumb color, track color */
+}
+
+
+/*
+ * Line Clamp Utility
+ * ------------------
+ * Provides a robust, cross-browser implementation for truncating text to a
+ * specific number of lines. Used for service addresses on cards.
+ */
+.line-clamp-2 {
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+}
+
+/*
+ * Desktop Service Modal Overlay
+ * ----------------------
+ * Styles for the Tinder-style service selection modal.
+ */
+.desktop-modal {
+  display: none; /* Hidden by default */
+  position: fixed;
+  z-index: 1000;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  background-color: rgba(0, 0, 0, 0.7);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  animation: fadeInModal 0.3s ease-out forwards;
+}
+
+@keyframes fadeInModal {
+  from { 
+    opacity: 0; 
+  }
+  to { 
+    opacity: 1; 
+  }
+}
+
+/*
+ * Modal Content Box
+ * -----------------
+ * The white container within the modal overlay.
+ */
+.desktop-modal-content {
+  background-color: #ffffff;
+  margin: 3% auto;
+  padding: 40px;
+  border-radius: 24px;
+  width: 90%;
+  max-width: 900px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+  animation: slideInContent 0.4s ease-out forwards;
+  position: relative;
+}
+
+@keyframes slideInContent {
+  from { 
+    transform: translateY(50px); 
+    opacity: 0; 
+  }
+  to { 
+    transform: translateY(0); 
+    opacity: 1; 
+  }
+}
+
+/*
+ * Modal Close Button
+ * ------------------
+ */
+.desktop-modal-close {
+  color: #888;
+  position: absolute;
+  top: 20px;
+  right: 30px;
+  font-size: 36px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: color 0.2s ease, transform 0.2s ease;
+  line-height: 1;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background-color: transparent;
+}
+
+.desktop-modal-close:hover,
+.desktop-modal-close:focus {
+  color: #333;
+  background-color: #f3f4f6;
+  transform: rotate(90deg);
+}
+
+/*
+ * Desktop Card Stack Container
+ * ----------------------------
+ * Container for the Tinder-style card stack on desktop
+ */
+#desktop-service-card-stack {
+  perspective: 1200px;
+  position: relative;
+}
+
+/*
+ * Desktop Service Cards
+ * ----------------------
+ * Individual cards in the Tinder-style stack
+ */
+.desktop-service-card {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  transition: transform 0.3s ease, opacity 0.3s ease;
+  will-change: transform, opacity;
+}
+
+.desktop-service-card .relative {
+  user-select: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  touch-action: none;
+}
+
+/*
+ * Card Hover Effects
+ * ------------------
+ */
+.desktop-service-card:hover .relative {
+  box-shadow: 0 25px 50px rgba(0, 0, 0, 0.2);
+}
+
+/*
+ * Button Styles
+ * -------------
+ */
+.desktop-like-btn,
+.desktop-dislike-btn {
+  transition: all 0.2s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+}
+
+.desktop-like-btn:active,
+.desktop-dislike-btn:active {
+  transform: scale(0.95);
+}
+
+.desktop-like-btn:hover {
+  transform: scale(1.05);
+  box-shadow: 0 10px 25px rgba(12, 74, 110, 0.4);
+}
+
+.desktop-dislike-btn:hover {
+  transform: scale(1.05);
+  box-shadow: 0 10px 25px rgba(239, 68, 68, 0.3);
+}
+
+/*
+ * Swipe Overlay Animations
+ * -------------------------
+ */
+[data-swipe-overlay] {
+  transition: opacity 0.2s ease-in-out;
+  pointer-events: none;
+}
+
+/*
+ * Clickable Service Cards Enhancement (for yacht itinerary)
+ * -------------------------------------
+ * Visual feedback for clickable service cards in the yacht itinerary
+ */
+.service-card,
+.real-service-card {
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.service-card::after,
+.real-service-card::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(135deg, rgba(12, 74, 110, 0.1) 0%, rgba(3, 105, 161, 0.1) 100%);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  pointer-events: none;
+}
+
+.service-card:hover::after,
+.real-service-card:hover::after {
+  opacity: 1;
+}
+
+.service-card:hover,
+.real-service-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+}
+
+/*
+ * Animation Utilities
+ * -------------------
+ */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.animate-fade-in {
+  animation: fadeIn 0.3s ease-out;
+}
+
+/*
+ * Keyboard Shortcuts Info
+ * ------------------------
+ */
+.keyboard-hint {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.25rem 0.75rem;
+  background-color: #f3f4f6;
+  border-radius: 0.5rem;
+  font-size: 0.875rem;
+  color: #6b7280;
+}
+
+.keyboard-hint kbd {
+  padding: 0.125rem 0.5rem;
+  background-color: #ffffff;
+  border: 1px solid #d1d5db;
+  border-radius: 0.25rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: #374151;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+}
+
+/* ==========================================
+   FLOATING CHAT BUTTON
+   ========================================== */
+
+#floating-chat-button {
+  position: fixed;
+  bottom: 2rem;
+  right: 2rem;
+  z-index: 1000;
+  
+  /* Appearance */
+  background: linear-gradient(135deg, #0c4a6e, #0369a1);
+  color: white;
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  cursor: pointer;
+
+  /* Animation & Visibility */
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 0.3s ease-out, transform 0.3s ease-out;
+  pointer-events: none; /* Button is not clickable when hidden */
+}
+
+#floating-chat-button.visible {
+  opacity: 1;
+  transform: translateY(0);
+  pointer-events: auto; /* Button becomes clickable when visible */
+}
+
+#floating-chat-button:hover {
+  transform: scale(1.05);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.25);
+}
+
+#floating-chat-button:active {
+  transform: scale(0.95);
+}

@@ -1,0 +1,11 @@
+{
+  "compilerOptions": {
+    "module": "commonjs",
+    "target": "es6",
+    "checkJs": false /* Explicitly disable JS checking for extra safety */
+  },
+  "exclude": [
+    "node_modules",
+    "public/vendor" /* This tells the editor to ignore the vendor folder */
+  ]
+}

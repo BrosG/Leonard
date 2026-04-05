@@ -1,0 +1,38 @@
+{
+  "name": "leonard",
+  "version": "1.0.0",
+  "description": "Leonard - AI Yacht Concierge. Plan yacht trips, find services, and manage your maritime experience.",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "dev": "wrangler pages dev --proxy 5173 -- npx vite --host",
+    "dev:frontend": "vite --host",
+    "build": "vite build",
+    "preview": "wrangler pages dev dist",
+    "deploy": "npm run build && wrangler pages deploy dist --project-name=leonard",
+    "db:create": "wrangler d1 create leonard-db",
+    "db:migrate": "wrangler d1 execute leonard-db --file=./prisma/d1-schema.sql",
+    "db:migrate:local": "wrangler d1 execute leonard-db --local --file=./prisma/d1-schema.sql",
+    "prisma:generate": "prisma generate",
+    "prebuild": "node scripts/download-assets.js",
+    "postinstall": "node scripts/download-assets.js"
+  },
+  "keywords": ["ai", "yacht", "concierge", "marine", "gemini", "cloudflare", "firebase"],
+  "author": "BrosG",
+  "license": "MIT",
+  "dependencies": {
+    "@google/generative-ai": "^0.21.0",
+    "@prisma/client": "^6.19.3",
+    "firebase": "^12.11.0",
+    "i18next": "^24.0.5",
+    "i18next-http-backend": "^3.0.2"
+  },
+  "devDependencies": {
+    "autoprefixer": "^10.4.20",
+    "postcss": "^8.4.49",
+    "prisma": "^6.19.3",
+    "tailwindcss": "^3.4.17",
+    "vite": "^6.0.5",
+    "wrangler": "^4.80.0"
+  }
+}

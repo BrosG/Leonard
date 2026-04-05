@@ -1,0 +1,203 @@
+{
+  "pageTitle": "MyYachtConcierge.ai - Votre Assistant Yacht IA",
+  "nav": {
+    "features": "Fonctionnalités",
+    "services": "Services",
+    "pricing": "Tarifs",
+    "whatsapp": "WhatsApp"
+  },
+  "hero": {
+    "badge": "⚓ Propulsé par l'IA",
+    "title1": "Planifiez Votre",
+    "title2": "Expérience Yacht Parfaite",
+    "subtitle": "Discutez avec Leonard, votre concierge yacht IA. Obtenez une aide instantanée pour tout ce qui est maritime ! 🛥️",
+    "leonardRole": "Votre Concierge Yacht IA",
+    "trips": "Voyages",
+    "needHelp": "Besoin d'assistance personnelle ?",
+    "whatsappBtn": "Discuter sur WhatsApp",
+    "social1": "5 000+ Propriétaires de Yachts Satisfaits",
+    "social2": "10 000+ Voyages Planifiés",
+    "social3": "Réponses IA Instantanées"
+  },
+  "chat": {
+    "aiName": "Leonard, votre Concierge IA",
+    "aiStatus": "En ligne",
+    "inputPlaceholder": "Parlez-moi de vos projets de yacht...",
+    "send": "Envoyer",
+    "typing": "Leonard est en train d'écrire...",
+    "welcome1": "Ahoy ! ⚓ Je suis Leonard, votre concierge yacht IA.",
+    "welcome2": "Comment puis-je vous aider aujourd'hui ? Demandez-moi un conseil, trouvez un service spécifique comme un mécanicien à St. Tropez, ou planifiez un itinéraire complet.",
+    "widgetTitle": "Discuter avec Leonard",
+    "widgetInputPlaceholder": "Posez une question...",
+    "placeholder": "Demandez-moi n'importe quoi sur les yachts...",
+    "example": "💡 Essayez : 'Trouvez des marinas à Monaco'",
+    "error": "Je suis désolé, j'ai eu du mal à traiter cela. Pourriez-vous reformuler ?",
+    "budgetSaved": "Parfait ! J'ai mis à jour votre budget. Votre plan est superbe ! ⚓"
+  },
+  "mobile": {
+    "servicePrompt": {
+      "title": "Trouvons Vos Services Maritimes !",
+      "subtitle": "Glissez pour trouver les meilleurs services pour votre yacht. ⚓"
+    },
+    "profile": {
+      "name": "Leonard",
+      "role": "Votre Concierge Yacht IA",
+      "status": "En ligne et prêt à vous aider ! ⚓",
+      "detailsTitle": "À Propos de Moi",
+      "detailsContent": "Je suis votre concierge yacht IA dédié, formé sur des milliers de voyages réussis. Mon objectif est de rendre votre processus de planification maritime fluide et agréable. Créons ensemble votre voyage parfait !",
+      "statsTitle": "Statistiques du Concierge",
+      "ownersHelped": "Propriétaires Aidés",
+      "tripsPlanned": "Voyages Planifiés",
+      "avgRating": "Note Moyenne"
+    }
+  },
+  "features": {
+    "title": "Votre Expérience Yacht Parfaite, Simplifiée",
+    "subtitle": "Notre IA gère la logistique maritime",
+    "ai": {
+      "title": "Propulsé par l'IA",
+      "desc": "Itinéraires personnalisés instantanés basés sur votre voyage"
+    },
+    "money": {
+      "title": "Économisez de l'Argent",
+      "desc": "Les outils budgétaires intelligents vous font économiser des milliers par rapport aux concierges traditionnels"
+    },
+    "time": {
+      "title": "Gagnez du Temps",
+      "desc": "Obtenez des plans de yacht complets en minutes, pas en semaines"
+    }
+  },
+  "services": {
+    "title": "Nous Aidons avec Tout ce qui est Maritime",
+    "subtitle": "De l'entretien à la gastronomie - Leonard est là pour vous !",
+    "askBtn": "Demander à Leonard",
+    "maintenance": {
+      "title": "Entretien du Bateau",
+      "desc": "Trouvez des mécaniciens marins de confiance et des services de bateaux",
+      "question": "J'ai besoin d'aide pour l'entretien du bateau"
+    },
+    "marina": {
+      "title": "Services de Marina",
+      "desc": "Découvrez des marinas parfaites avec d'excellentes installations",
+      "question": "Pouvez-vous recommander une bonne marina ?"
+    },
+    "provisions": {
+      "title": "Approvisionnement et Restauration",
+      "desc": "Approvisionnement gastronomique et services de chef privé",
+      "question": "J'ai besoin d'approvisionnement pour mon yacht"
+    },
+    "crew": {
+      "title": "Équipage et Personnel",
+      "desc": "Membres d'équipage professionnels et personnel de yacht",
+      "question": "Aidez-moi à trouver des membres d'équipage"
+    },
+    "dining": {
+      "title": "Restaurants en Bord de Mer",
+      "desc": "Restaurants exclusifs avec amarrage pour yachts",
+      "question": "Quels sont les meilleurs restaurants en bord de mer ?"
+    },
+    "experiences": {
+      "title": "Activités Aquatiques",
+      "desc": "Plongée, pêche, sports nautiques, et plus encore",
+      "question": "Quelles activités aquatiques recommandez-vous ?"
+    },
+    "concierge": {
+      "title": "Services de Conciergerie",
+      "desc": "Transport de luxe et planification d'événements",
+      "question": "J'ai besoin de services de conciergerie"
+    },
+    "fuel": {
+      "title": "Carburant et Fournitures",
+      "desc": "Quais de carburant et magasins de fournitures marines",
+      "question": "Où puis-je faire le plein de mon yacht ?"
+    },
+    "whatsapp": {
+      "title": "Besoin d'Assistance Personnelle 1-à-1 ?",
+      "desc": "Discutez directement avec nos experts en yachts sur WhatsApp pour un service personnalisé !",
+      "btn": "Démarrer le Chat WhatsApp Maintenant",
+      "response": "Temps de réponse moyen : Moins de 5 minutes"
+    }
+  },
+  "pricing": {
+    "trusted": "Approuvé par 5 000+ Propriétaires de Yachts",
+    "title": "Investissement dans Votre Voyage Parfait",
+    "subtitle": "Choisissez le plan qui correspond à vos rêves maritimes",
+    "limited": "OFFRE LIMITÉE",
+    "free": {
+      "name": "Gratuit Pour Toujours",
+      "perfect": "Parfait pour explorer",
+      "save": "Économisez 20+ Heures",
+      "feat1": "Illimité",
+      "feat1b": "conversations IA",
+      "feat2": "Générez des itinéraires de yacht illimités",
+      "feat3": "Estimations budgétaires intelligentes",
+      "feat4": "Suggestions de services IA",
+      "cta": "Commencer Gratuitement"
+    },
+    "pro": {
+      "badge": "MEILLEURE VALEUR - 89% Choisissent Ceci",
+      "name": "Plan Pro",
+      "payment": "Paiement unique • Accès à vie",
+      "save": "Économisez 100+ Heures & 5 000$+",
+      "feat1": "Tout dans Gratuit",
+      "feat2": "Exports PDF magnifiques",
+      "feat3": "Outils budgétaires avancés",
+      "feat4": "Réponses IA prioritaires",
+      "feat5": "Économise 5 000$+ en erreurs de planification",
+      "cta": "Obtenir Pro Maintenant - Économisez 50$ ! 🎉",
+      "guarantee": "💳 Paiement sécurisé • Garantie de remboursement de 30 jours",
+      "joined": "47 propriétaires de yachts ont rejoint aujourd'hui"
+    },
+    "premium": {
+      "badge": "POUR DES VOYAGES SANS STRESS",
+      "name": "Premium VIP",
+      "desc": "Solution complète de conciergerie de yacht",
+      "save": "Économisez 200+ Heures & 10 000$+",
+      "feat1": "Tout dans Pro",
+      "feat2": "Consultation vidéo privée 1-à-1 (valeur 200$)",
+      "feat3": "Gestionnaire de coordination d'équipage",
+      "feat4": "Suivi de voyage en temps réel",
+      "feat5": "Économise 10 000$+ vs. concierge traditionnel",
+      "cta": "Obtenir Premium - Économisez 150$ ! 👑"
+    }
+  },
+  "plan": {
+    "title": "Votre Itinéraire de Yacht Généré par IA",
+    "theme": "Thème",
+    "marina": "Marina",
+    "itinerary": "Itinéraire",
+    "dining": "Expérience Culinaire",
+    "onboard": "Restauration à Bord",
+    "restaurants": "Restaurants Recommandés",
+    "budget": "Répartition du Budget",
+    "budgetTotal": "Coût Total Estimé",
+    "saveBudget": "Enregistrer les Modifications du Budget",
+    "services": "Services et Prestataires",
+    "packing": "Liste de Bagages",
+    "changes": "Vous Voulez Faire des Modifications ?",
+    "refine": "Dites-moi ce que vous aimeriez ajuster, et je vais affiner votre voyage parfait !",
+    "continue": "Continuer la Planification"
+  },
+  "loading": {
+    "title": "Création de Votre Itinéraire de Yacht Parfait ⚓",
+    "subtitle": "Leonard trace votre parcours...",
+    "while": "⚓ Pendant que vous attendez...",
+    "follow": "Suivez-nous pour l'inspiration maritime quotidienne !"
+  },
+  "cta": {
+    "title": "Prêt à créer votre voyage parfait ?",
+    "subtitle": "Rejoignez des milliers de propriétaires de yachts qui ont planifié leurs voyages de rêve avec l'IA",
+    "start": "Commencer la Planification",
+    "whatsapp": "Discuter sur WhatsApp"
+  },
+  "footer": {
+    "tagline": "Votre assistant concierge yacht propulsé par l'IA",
+    "product": "Produit",
+    "support": "Support",
+    "whatsapp": "Chat WhatsApp",
+    "faq": "FAQ",
+    "contact": "Contact",
+    "follow": "Suivez-Nous",
+    "copyright": "© 2024 MyYachtConcierge.ai. Tous droits réservés."
+  }
+}

@@ -1,0 +1,203 @@
+{
+  "pageTitle": "MyYachtConcierge.ai - Your AI Yacht Assistant",
+  "nav": {
+    "features": "Features",
+    "services": "Services",
+    "pricing": "Pricing",
+    "whatsapp": "WhatsApp"
+  },
+  "hero": {
+    "badge": "⚓ Powered by AI Navigation",
+    "title1": "Plan Your Perfect",
+    "title2": "Yacht Experience",
+    "subtitle": "Chat with Leonard, your AI yacht concierge. Get instant help with everything maritime! 🛥️",
+    "leonardRole": "Your AI Yacht Concierge",
+    "trips": "Trips",
+    "needHelp": "Need personal assistance?",
+    "whatsappBtn": "Chat on WhatsApp",
+    "social1": "5,000+ Happy Yacht Owners",
+    "social2": "10,000+ Trips Planned",
+    "social3": "Instant AI Responses"
+  },
+  "chat": {
+    "aiName": "Leonard, your AI Concierge",
+    "aiStatus": "Online",
+    "inputPlaceholder": "Tell me about your yacht plans...",
+    "send": "Send",
+    "typing": "Leonard is typing...",
+    "welcome1": "Ahoy! ⚓ I'm Leonard, your AI yacht concierge.",
+    "welcome2": "How can I help you today? You can ask me for advice, find a specific service like a mechanic in St. Tropez, or plan a full itinerary.",
+    "widgetTitle": "Chat with Leonard",
+    "widgetInputPlaceholder": "Ask a question...",
+    "placeholder": "Ask me anything about yachts...",
+    "example": "💡 Try: 'Find marinas in Monaco'",
+    "error": "I'm sorry, I had trouble processing that. Could you try rephrasing?",
+    "budgetSaved": "Perfect! I've updated your budget. Your plan is looking great! ⚓"
+  },
+  "mobile": {
+    "servicePrompt": {
+      "title": "Let's Find Your Marine Services!",
+      "subtitle": "Swipe to find the best services for your yacht. ⚓"
+    },
+    "profile": {
+      "name": "Leonard",
+      "role": "Your AI Yacht Concierge",
+      "status": "Online & ready to assist! ⚓",
+      "detailsTitle": "About Me",
+      "detailsContent": "I'm your dedicated AI yacht concierge, trained on thousands of successful voyages. My goal is to make your maritime planning process smooth and enjoyable. Let's create your perfect voyage together!",
+      "statsTitle": "Concierge Stats",
+      "ownersHelped": "Owners Helped",
+      "tripsPlanned": "Trips Planned",
+      "avgRating": "Avg. Rating"
+    }
+  },
+  "features": {
+    "title": "Your Perfect Yacht Experience, Simplified",
+    "subtitle": "Our AI handles the maritime logistics",
+    "ai": {
+      "title": "AI-Powered",
+      "desc": "Instant personalized itineraries based on your voyage"
+    },
+    "money": {
+      "title": "Save Money",
+      "desc": "Smart budget tools save you thousands vs traditional concierges"
+    },
+    "time": {
+      "title": "Save Time",
+      "desc": "Get complete yacht plans in minutes, not weeks"
+    }
+  },
+  "services": {
+    "title": "We Help With Everything Maritime",
+    "subtitle": "From maintenance to gourmet dining - Leonard is here for you!",
+    "askBtn": "Ask Leonard",
+    "maintenance": {
+      "title": "Boat Maintenance",
+      "desc": "Find trusted marine mechanics and boat services",
+      "question": "I need help with boat maintenance"
+    },
+    "marina": {
+      "title": "Marina Services",
+      "desc": "Discover perfect marinas with excellent facilities",
+      "question": "Can you recommend a good marina?"
+    },
+    "provisions": {
+      "title": "Provisions & Catering",
+      "desc": "Gourmet provisioning and private chef services",
+      "question": "I need provisions for my yacht"
+    },
+    "crew": {
+      "title": "Crew & Staff",
+      "desc": "Professional crew members and yacht staff",
+      "question": "Help me find crew members"
+    },
+    "dining": {
+      "title": "Waterfront Dining",
+      "desc": "Exclusive restaurants with yacht docking",
+      "question": "What are the best waterfront restaurants?"
+    },
+    "experiences": {
+      "title": "Water Activities",
+      "desc": "Diving, fishing, water sports, and more",
+      "question": "What water activities do you recommend?"
+    },
+    "concierge": {
+      "title": "Concierge Services",
+      "desc": "Luxury transportation and event planning",
+      "question": "I need concierge services"
+    },
+    "fuel": {
+      "title": "Fuel & Supplies",
+      "desc": "Fuel docks and marine supply stores",
+      "question": "Where can I refuel my yacht?"
+    },
+    "whatsapp": {
+      "title": "Need Personal 1-on-1 Assistance?",
+      "desc": "Chat directly with our yacht experts on WhatsApp for personalized service!",
+      "btn": "Start WhatsApp Chat Now",
+      "response": "Average response time: Under 5 minutes"
+    }
+  },
+  "pricing": {
+    "trusted": "Trusted by 5,000+ Yacht Owners",
+    "title": "Investment in Your Perfect Voyage",
+    "subtitle": "Choose the plan that matches your maritime dreams",
+    "limited": "LIMITED TIME",
+    "free": {
+      "name": "Free Forever",
+      "perfect": "Perfect for exploring",
+      "save": "Save 20+ Hours",
+      "feat1": "Unlimited",
+      "feat1b": "AI conversations",
+      "feat2": "Generate unlimited yacht itineraries",
+      "feat3": "Smart budget estimates",
+      "feat4": "AI service suggestions",
+      "cta": "Start Free Now"
+    },
+    "pro": {
+      "badge": "BEST VALUE - 89% Choose This",
+      "name": "Pro Plan",
+      "payment": "One-time payment • Lifetime access",
+      "save": "Save 100+ Hours & $5,000+",
+      "feat1": "Everything in Free",
+      "feat2": "Beautiful PDF exports",
+      "feat3": "Advanced budget tools",
+      "feat4": "Priority AI responses",
+      "feat5": "Saves $5,000+ in planning mistakes",
+      "cta": "Get Pro Now - Save $50! 🎉",
+      "guarantee": "💳 Secure payment • 30-day money-back guarantee",
+      "joined": "47 yacht owners joined today"
+    },
+    "premium": {
+      "badge": "FOR STRESS-FREE VOYAGES",
+      "name": "Premium VIP",
+      "desc": "Complete yacht concierge solution",
+      "save": "Save 200+ Hours & $10,000+",
+      "feat1": "Everything in Pro",
+      "feat2": "Private 1-on-1 video consultation ($200 value)",
+      "feat3": "Crew coordination manager",
+      "feat4": "Real-time voyage tracking",
+      "feat5": "Saves $10,000+ vs. traditional concierge",
+      "cta": "Get Premium - Save $150! 👑"
+    }
+  },
+  "plan": {
+    "title": "Your AI-Generated Yacht Itinerary",
+    "theme": "Theme",
+    "marina": "Marina",
+    "itinerary": "Itinerary",
+    "dining": "Dining Experience",
+    "onboard": "Onboard Dining",
+    "restaurants": "Recommended Restaurants",
+    "budget": "Budget Breakdown",
+    "budgetTotal": "Total Estimated Cost",
+    "saveBudget": "Save Budget Changes",
+    "services": "Services & Providers",
+    "packing": "Packing List",
+    "changes": "Want to Make Changes?",
+    "refine": "Tell me what you'd like to adjust, and I'll refine your perfect voyage!",
+    "continue": "Continue Planning"
+  },
+  "loading": {
+    "title": "Creating Your Perfect Yacht Itinerary ⚓",
+    "subtitle": "Leonard is charting your course...",
+    "while": "⚓ While you wait...",
+    "follow": "Follow us for daily maritime inspiration!"
+  },
+  "cta": {
+    "title": "Ready to create your perfect voyage?",
+    "subtitle": "Join thousands of yacht owners who've planned their dream trips with AI",
+    "start": "Start Planning Now",
+    "whatsapp": "Chat on WhatsApp"
+  },
+  "footer": {
+    "tagline": "Your AI-powered yacht concierge assistant",
+    "product": "Product",
+    "support": "Support",
+    "whatsapp": "WhatsApp Chat",
+    "faq": "FAQ",
+    "contact": "Contact",
+    "follow": "Follow Us",
+    "copyright": "© 2024 MyYachtConcierge.ai. All rights reserved."
+  }
+}
