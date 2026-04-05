@@ -29,7 +29,7 @@ export function createAuthModal() {
 
         <!-- Phone Sign-In -->
         <div id="phone-step-1">
-          <label class="block text-sm font-medium text-gray-700 mb-2">Phone Number</label>
+          <label for="auth-phone-input" class="block text-sm font-medium text-gray-700 mb-2">Phone Number</label>
           <div class="flex gap-2">
             <input id="auth-phone-input" type="tel" placeholder="+33 6 12 34 56 78"
               class="flex-1 px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-ocean-blue focus:outline-none transition-colors" />
@@ -43,7 +43,7 @@ export function createAuthModal() {
 
         <!-- OTP Verification -->
         <div id="phone-step-2" class="hidden">
-          <label class="block text-sm font-medium text-gray-700 mb-2">Verification Code</label>
+          <label for="auth-otp-input" class="block text-sm font-medium text-gray-700 mb-2">Verification Code</label>
           <div class="flex gap-2">
             <input id="auth-otp-input" type="text" placeholder="123456" maxlength="6"
               class="flex-1 px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-ocean-blue focus:outline-none transition-colors text-center text-2xl tracking-widest" />
@@ -56,10 +56,10 @@ export function createAuthModal() {
         </div>
 
         <!-- Error display -->
-        <div id="auth-error" class="hidden mt-4 p-3 bg-red-50 border border-red-200 rounded-xl text-red-600 text-sm"></div>
+        <div id="auth-error" class="hidden mt-4 p-3 bg-red-50 border border-red-200 rounded-xl text-red-600 text-sm" role="alert" aria-live="polite"></div>
 
         <!-- Loading -->
-        <div id="auth-loading" class="hidden mt-4 text-center">
+        <div id="auth-loading" class="hidden mt-4 text-center" role="status" aria-live="polite">
           <div class="inline-flex items-center gap-2 text-ocean-blue">
             <svg class="animate-spin w-5 h-5" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"/><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"/></svg>
             <span>Authenticating...</span>
