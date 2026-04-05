@@ -35,6 +35,7 @@ jobs:
           name: dist
           path: dist/
 
+  # Hosting and API deploy in parallel after build
   deploy-hosting:
     needs: build-and-test
     if: github.event_name == 'push' && github.ref == 'refs/heads/main'
@@ -77,12 +78,30 @@ jobs:
             --region ${{ env.REGION }} \
             --project ${{ env.PROJECT_ID }} \
             --allow-unauthenticated \
+            --memory=512Mi \
+            --cpu=1 \
+            --timeout=60 \
+            --min-instances=0 \
+            --max-instances=10 \
             --set-env-vars="FIREBASE_PROJECT_ID=${{ env.PROJECT_ID }}" \
-            --set-secrets="GEMINI_API_KEY=GEMINI_API_KEY:latest,GOOGLE_PLACES_API_KEY=GOOGLE_PLACES_API_KEY:latest,DATABASE_URL=DATABASE_URL:latest"
+            --set-secrets="GEMINI_API_KEY=GEMINI_API_KEY:latest,GOOGLE_PLACES_API_KEY=GOOGLE_PLACES_API_KEY:latest,DATABASE_URL=DATABASE_URL:latest" \
+            --quiet
 
-      - name: Run Prisma Migrations
+      - name: Verify deployment health
         run: |
-          gcloud run jobs execute prisma-migrate \
+          SERVICE_URL=$(gcloud run services describe ${{ env.SERVICE_NAME }} \
             --region ${{ env.REGION }} \
             --project ${{ env.PROJECT_ID }} \
-            --wait || echo "Migration job not set up yet - run manually first time"
+            --format='value(status.url)')
+          echo "Checking health at $SERVICE_URL/api/health"
+          for i in 1 2 3 4 5; do
+            STATUS=$(curl -s -o /dev/null -w '%{http_code}' "$SERVICE_URL/api/health")
+            if [ "$STATUS" = "200" ]; then
+              echo "Health check passed"
+              exit 0
+            fi
+            echo "Attempt $i: got $STATUS, retrying..."
+            sleep 5
+          done
+          echo "Health check failed after 5 attempts"
+          exit 1
