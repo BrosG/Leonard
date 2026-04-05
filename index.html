@@ -206,7 +206,28 @@
                           
                                 <!-- Chat Messages -->
                                 <div id="chat-messages" class="flex-1 overflow-y-auto p-4 space-y-6 custom-scrollbar" role="log" aria-live="polite" aria-label="Chat messages">
-                                  <!-- Chat messages will be dynamically inserted here by app.js -->
+                                  <!-- Suggested prompts - hidden after first message -->
+                                  <div id="suggested-prompts" class="mt-4">
+                                    <p class="text-center text-sm text-gray-500 mb-4">Try one of these to get started:</p>
+                                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                                      <button class="prompt-suggestion text-left p-3 bg-white border border-blue-100 rounded-xl hover:border-ocean-blue hover:shadow-md transition-all text-sm group" data-prompt="Plan a 3-day trip from Monaco to Saint-Tropez">
+                                        <span class="text-ocean-blue font-semibold group-hover:underline">Plan a trip</span>
+                                        <span class="text-gray-500 block mt-0.5">Monaco to Saint-Tropez, 3 days</span>
+                                      </button>
+                                      <button class="prompt-suggestion text-left p-3 bg-white border border-blue-100 rounded-xl hover:border-ocean-blue hover:shadow-md transition-all text-sm group" data-prompt="Find the best marinas in Ibiza with good facilities">
+                                        <span class="text-ocean-blue font-semibold group-hover:underline">Find marinas</span>
+                                        <span class="text-gray-500 block mt-0.5">Best facilities in Ibiza</span>
+                                      </button>
+                                      <button class="prompt-suggestion text-left p-3 bg-white border border-blue-100 rounded-xl hover:border-ocean-blue hover:shadow-md transition-all text-sm group" data-prompt="Plan a week-long yacht trip from Miami to the Bahamas">
+                                        <span class="text-ocean-blue font-semibold group-hover:underline">Caribbean cruise</span>
+                                        <span class="text-gray-500 block mt-0.5">Miami to Bahamas, 7 days</span>
+                                      </button>
+                                      <button class="prompt-suggestion text-left p-3 bg-white border border-blue-100 rounded-xl hover:border-ocean-blue hover:shadow-md transition-all text-sm group" data-prompt="Find waterfront restaurants with yacht docking near Cannes">
+                                        <span class="text-ocean-blue font-semibold group-hover:underline">Dining spots</span>
+                                        <span class="text-gray-500 block mt-0.5">Waterfront restaurants near Cannes</span>
+                                      </button>
+                                    </div>
+                                  </div>
                                 </div>
                           
                                 <!-- Chat Input -->

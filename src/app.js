@@ -41,16 +41,48 @@ function sanitize(str) {
   return div.innerHTML;
 }
 
+// Simple markdown-like formatting for AI messages
+function formatMessage(text) {
+  let safe = sanitize(text);
+  // Bold: **text**
+  safe = safe.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>');
+  // Bullet lists: lines starting with - or •
+  safe = safe.replace(/^[-•]\s+(.+)$/gm, '<li class="ml-4">$1</li>');
+  // Wrap consecutive <li> in <ul>
+  safe = safe.replace(/((?:<li[^>]*>.*?<\/li>\s*)+)/g, '<ul class="list-disc space-y-1 my-2">$1</ul>');
+  // Line breaks
+  safe = safe.replace(/\n/g, '<br>');
+  return safe;
+}
+
+// Hide suggested prompts on first message
+function hideSuggestedPrompts() {
+  document.getElementById("suggested-prompts")?.remove();
+}
+
 function addMessageToChat(message, isUser = false) {
+  hideSuggestedPrompts();
   const chatMessages = document.getElementById("chat-messages");
   if (!chatMessages) return;
+  const msgId = `msg-${Date.now()}`;
   const messageDiv = document.createElement("div");
   if (isUser) {
     messageDiv.className = "flex items-end justify-end space-x-2 animate-fade-in";
     messageDiv.innerHTML = `<div class="flex-1 flex justify-end"><div class="chat-bubble-user"><p class="text-white">${sanitize(message)}</p></div></div>`;
   } else {
-    messageDiv.className = "flex items-end space-x-2 animate-fade-in";
-    messageDiv.innerHTML = `<div class="flex-shrink-0"><img src="/images/leonard-avatar.jpg" alt="Leonard AI concierge" class="w-10 h-10 rounded-full object-cover border-2 border-blue-300 shadow-lg"/></div><div class="flex-1"><div class="chat-bubble-ai"><p class="text-gray-800 whitespace-pre-line text-sm">${sanitize(message)}</p></div></div>`;
+    messageDiv.className = "flex items-end space-x-2 animate-fade-in group";
+    messageDiv.innerHTML = `
+      <div class="flex-shrink-0"><img src="/images/leonard-avatar.jpg" alt="Leonard AI concierge" class="w-10 h-10 rounded-full object-cover border-2 border-blue-300 shadow-lg"/></div>
+      <div class="flex-1"><div class="chat-bubble-ai">
+        <div class="text-gray-800 text-sm leading-relaxed">${formatMessage(message)}</div>
+        <div class="flex gap-2 mt-2 opacity-0 group-hover:opacity-100 transition-opacity">
+          <button onclick="navigator.clipboard.writeText(document.getElementById('${msgId}')?.dataset.raw||'')" class="text-xs text-gray-400 hover:text-ocean-blue transition-colors" title="Copy">
+            <svg class="w-4 h-4 inline" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"/></svg> Copy
+          </button>
+        </div>
+      </div></div>`;
+    messageDiv.id = msgId;
+    messageDiv.dataset.raw = message;
   }
   chatMessages.appendChild(messageDiv);
   chatMessages.scrollTo({ top: chatMessages.scrollHeight, behavior: "smooth" });
@@ -234,13 +266,8 @@ window.yachtContext = window.yachtContext || {};
 async function sendMessage(message) {
   if (!message.trim()) return;
 
-  // Check if user needs to sign in (after 3 free messages)
-  if (needsAuth()) {
-    showAuthModal();
-    addMessageToChat("Please sign in to continue chatting with Leonard. You get unlimited access with a free account!", false);
-    return;
-  }
-
+  // Smart conversion: allow messages but gate full results after limit
+  const atLimit = needsAuth();
   incrementMessageCount();
   addMessageToChat(message, true);
   addTypingIndicator();
@@ -270,6 +297,14 @@ async function sendMessage(message) {
 
     if (aiResponse.yacht_context) {
       window.yachtContext = { ...window.yachtContext, ...aiResponse.yacht_context };
+    }
+
+    // Smart conversion: after showing value, prompt sign-up
+    if (atLimit) {
+      setTimeout(() => {
+        addMessageToChat("You're getting great results! **Sign in for free** to save your trips, get unlimited planning, and unlock PDF exports.", false);
+        showAuthModal();
+      }, 1500);
     }
   } catch (error) {
     console.error("Failed to get AI response:", error);
@@ -361,6 +396,17 @@ document.addEventListener("DOMContentLoaded", async () => {
         document.getElementById("login-btn")?.addEventListener("click", showAuthModal);
       }
     }
+  });
+
+  // Suggested prompt click handlers
+  document.querySelectorAll(".prompt-suggestion").forEach((btn) => {
+    btn.addEventListener("click", () => {
+      const prompt = btn.dataset.prompt;
+      if (prompt) {
+        document.getElementById("chat-input").value = prompt;
+        handleSend();
+      }
+    });
   });
 
   showWelcomeMessages();
