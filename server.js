@@ -23,7 +23,7 @@ app.get('/api/health', (req, res) => {
   res.json({ status: 'ok', service: 'leonard-api', timestamp: new Date().toISOString() });
 });
 
-// Auth middleware
+// Auth middleware - optional for generate-plan/get-services, required for user/trips
 async function authMiddleware(req, res, next) {
   const authHeader = req.headers.authorization;
   if (!authHeader?.startsWith('Bearer ')) {
@@ -48,9 +48,30 @@ async function authMiddleware(req, res, next) {
   }
 }
 
-// Apply auth to all /api routes except health
-app.use('/api/generate-plan', authMiddleware);
-app.use('/api/get-services', authMiddleware);
+// Optional auth - attaches user if token present, continues either way
+async function optionalAuth(req, res, next) {
+  const authHeader = req.headers.authorization;
+  if (authHeader?.startsWith('Bearer ')) {
+    try {
+      const token = authHeader.slice(7);
+      const decoded = await admin.auth().verifyIdToken(token);
+      req.user = {
+        uid: decoded.uid,
+        email: decoded.email || null,
+        phone: decoded.phone_number || null,
+        name: decoded.name || null,
+        picture: decoded.picture || null,
+        provider: decoded.firebase?.sign_in_provider || 'unknown',
+      };
+    } catch (e) { /* continue without auth */ }
+  }
+  next();
+}
+
+// AI endpoints: optional auth (allow 3 free messages from frontend)
+app.use('/api/generate-plan', optionalAuth);
+app.use('/api/get-services', optionalAuth);
+// User/trips: require auth
 app.use('/api/user', authMiddleware);
 app.use('/api/trips', authMiddleware);
 

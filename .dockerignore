@@ -6,6 +6,6 @@ dist
 .wrangler
 .flowky
 .claude
-public
+.firebase
 src
 *.md

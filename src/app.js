@@ -6,7 +6,32 @@ import { renderServiceSelectionModal } from "./desktop/DesktopUI.js";
 import { authFetch, getCurrentUser } from "./auth/firebase.js";
 import { initAuthUI, showAuthModal, closeAuthModal, createUserMenu, initUserMenu } from "./auth/auth-ui.js";
 
-const API_BASE_URL = "";
+const API_BASE_URL = import.meta.env.VITE_API_URL || "";
+
+// Free message counter - allow 3 messages before requiring login
+const FREE_MESSAGE_LIMIT = 3;
+let messageCount = parseInt(sessionStorage.getItem("leonard_msg_count") || "0");
+
+function incrementMessageCount() {
+  messageCount++;
+  sessionStorage.setItem("leonard_msg_count", String(messageCount));
+}
+
+function needsAuth() {
+  return !getCurrentUser() && messageCount >= FREE_MESSAGE_LIMIT;
+}
+
+// Smart fetch: uses authFetch if logged in, plain fetch otherwise
+async function apiFetch(url, options = {}) {
+  const user = getCurrentUser();
+  if (user) {
+    return authFetch(url, options);
+  }
+  return fetch(url, {
+    ...options,
+    headers: { ...options.headers, "Content-Type": "application/json" },
+  });
+}
 
 // --- Helper functions ---
 function addMessageToChat(message, isUser = false) {
@@ -158,7 +183,7 @@ async function fetchAndDisplayServices({ query }) {
     return;
   }
   try {
-    const response = await authFetch(`${API_BASE_URL}/api/get-services`, {
+    const response = await apiFetch(`${API_BASE_URL}/api/get-services`, {
       method: "POST",
       body: JSON.stringify({ query }),
     });
@@ -182,17 +207,19 @@ window.yachtContext = window.yachtContext || {};
 async function sendMessage(message) {
   if (!message.trim()) return;
 
-  // Check auth
-  if (!getCurrentUser()) {
+  // Check if user needs to sign in (after 3 free messages)
+  if (needsAuth()) {
     showAuthModal();
+    addMessageToChat("Please sign in to continue chatting with Leonard. You get unlimited access with a free account!", false);
     return;
   }
 
+  incrementMessageCount();
   addMessageToChat(message, true);
   addTypingIndicator();
 
   try {
-    const response = await authFetch(`${API_BASE_URL}/api/generate-plan`, {
+    const response = await apiFetch(`${API_BASE_URL}/api/generate-plan`, {
       method: "POST",
       body: JSON.stringify({
         prompt: message,
